@@ -1,0 +1,9 @@
+[postgres]
+username = ""
+host = ""
+port = ""
+dbname = ""
+password = ""
+sslmode = "disable"
+timezone = "Europe/Moscow"
+
