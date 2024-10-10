@@ -1,0 +1,66 @@
+basePath: /api/v1
+definitions:
+  handler.SignUpInput:
+    properties:
+      email:
+        maxLength: 64
+        type: string
+      password:
+        maxLength: 64
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.SignUpResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  handler.errResponse:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  license:
+    name: MIT
+  title: Backend part of educational banking application
+  version: "1.0"
+paths:
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: register new user
+      parameters:
+      - description: sign up info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignUpInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SignUpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errResponse'
+      summary: Sign up
+swagger: "2.0"

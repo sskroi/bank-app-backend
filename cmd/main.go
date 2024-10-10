@@ -14,6 +14,11 @@ import (
 	"syscall"
 )
 
+//	@title			Backend part of educational banking application
+//	@version		1.0
+//	@host			localhost:8080
+//	@BasePath		/api/v1
+//	@license.name	MIT
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
