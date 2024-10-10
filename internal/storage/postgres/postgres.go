@@ -21,7 +21,7 @@ type PgStorage struct {
 	db *gorm.DB
 }
 
-func New(cfg *Config) (*PgStorage, error) {
+func New(cfg Config) (*PgStorage, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
 		cfg.Host, cfg.Username, cfg.Password, cfg.DBName, cfg.Port, cfg.SSLMode, cfg.Timezone)
 
@@ -31,4 +31,13 @@ func New(cfg *Config) (*PgStorage, error) {
 	}
 
 	return &PgStorage{db}, nil
+}
+
+func (self *PgStorage) Close() error {
+	sqldb, err := self.db.DB()
+	if err != nil {
+	    return err
+	}
+
+	return sqldb.Close()
 }

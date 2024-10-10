@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/BurntSushi/toml"
 
+	"bank-app-backend/internal/server"
 	"bank-app-backend/internal/storage/postgres"
 )
 
@@ -12,6 +13,7 @@ const (
 
 type Config struct {
 	Postgres postgres.Config `toml:"postgres"`
+	Server   server.Config   `toml:"server"`
 }
 
 func LoadConfig() (*Config, error) {

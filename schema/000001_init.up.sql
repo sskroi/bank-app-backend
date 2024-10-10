@@ -1,12 +1,12 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   public_id UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
-  password_hash VARCHAR(256) NOT NULL,
   email VARCHAR(256) UNIQUE NOT NULL,
+  password_hash VARCHAR(256) NOT NULL,
+  passport VARCHAR(64),
   name VARCHAR(64) NOT NULL,
   surname VARCHAR(64) NOT NULL,
   patronymic VARCHAR(64),
-  passport VARCHAR(64),
   is_inactive BOOLEAN NOT NULL DEFAULT false
 );
 
