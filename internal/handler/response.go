@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"log"
+	"log/slog"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +11,7 @@ type errResponse struct {
 }
 
 func newErrResponse(c *gin.Context, statusCode int, err error, msg string) {
-	log.Printf("err: %s, msg: %s", err, msg)
+	slog.Warn("new error response", "err", err, "resp msg", msg)
 
 	c.AbortWithStatusJSON(statusCode, errResponse{msg})
 }

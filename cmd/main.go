@@ -7,27 +7,32 @@ import (
 	"bank-app-backend/internal/service"
 	"bank-app-backend/internal/storage/postgres"
 	"context"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-//	@title			Backend part of educational banking application
-//	@version		1.0
-//	@host			localhost:8080
-//	@BasePath		/api/v1
-//	@license.name	MIT
+// @title			Backend part of educational banking application
+// @version		1.0
+// @host			localhost:8080
+// @BasePath		/api/v1
+// @license.name	MIT
 func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.Fatalf("can't load config: %s", err)
+		slog.Error("can't load config", "err", err)
+		return
 	}
 
 	store, err := postgres.New(cfg.Postgres)
 	if err != nil {
-		log.Fatalf("can't connect to database: %s", err)
+		slog.Error("can't connect to database", "err", err)
+		return
 	}
 
 	service := service.New(store)
@@ -37,23 +42,23 @@ func main() {
 	go func() {
 		err := server.Run(cfg.Server, handler.InitRoutes())
 		if err != nil && err != http.ErrServerClosed {
-			log.Fatalf("error occured while running http server: %s", err)
+			slog.Error("error occured while running http server", "err", err)
 		}
 	}()
 
-	log.Printf("app started on port: %s", cfg.Server.Port)
+	slog.Info("app started", "port", cfg.Server.Port)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	log.Print("app shutting down")
+	slog.Info("app shutting down")
 
 	if err := server.Shutdown(context.Background()); err != nil {
-		log.Printf("error occured on server shutting down: %s", err.Error())
+		slog.Error("error occured on server shutting down", "err", err)
 	}
 
 	if err := store.Close(); err != nil {
-		log.Printf("error occured on db connection close: %s", err.Error())
+		slog.Error("error occured on db connection close", "err", err)
 	}
 }
