@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE accounts (
   id SERIAL PRIMARY KEY,
-  account_number UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
+  number UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
   owner_id INTEGER NOT NULL,
   balance DECIMAL(20, 2) NOT NULL DEFAULT 0.00,
   currency VARCHAR(16) NOT NULL,

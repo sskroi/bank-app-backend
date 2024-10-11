@@ -1,10 +1,10 @@
 package postgres
 
-import "bank-app-backend/internal/storage"
+import "bank-app-backend/internal/domain"
 
 // Authorization
-func (self *PgStorage) CreateUser(email, passwordHash, passport, name, surname string, patronymic *string) (storage.User, error) {
-	newUser := storage.User{
+func (self *PgStorage) CreateUser(email, passwordHash, passport, name, surname string, patronymic *string) (domain.User, error) {
+	newUser := domain.User{
 		Email:        email,
 		PasswordHash: passwordHash,
 		Passport:     passport,
@@ -22,8 +22,8 @@ func (self *PgStorage) CreateUser(email, passwordHash, passport, name, surname s
 	return newUser, err
 }
 
-func (self *PgStorage) GetUser(email, passwordHash string) (storage.User, error) {
-	user := storage.User{}
+func (self *PgStorage) GetUser(email, passwordHash string) (domain.User, error) {
+	user := domain.User{}
 
 	res := self.db.Where("email = ? AND password_hash = ?", email, passwordHash).Find(&user)
 
