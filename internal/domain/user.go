@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 type User struct {
 	ID           uint      `gorm:"column:id;primaryKey"`
@@ -13,3 +17,7 @@ type User struct {
 	Patronymic   *string   `gorm:"column:patronymic"`
 	IsInactive   bool      `gorm:"column:is_inactive"`
 }
+
+var (
+	ErrUserAlreayExists = errors.New("user with such email already exists")
+)

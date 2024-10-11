@@ -7,8 +7,8 @@ import (
 
 type Storage interface {
 	// Authorization
-	// ID, PublicID fields will be ignored
-	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
+	// ID, PublicID fields will be ignored, returns domain.ErrUserAlreayExists if email already registered
+	CreateUser(ctx context.Context, user domain.User) error
 	GetUser(ctx context.Context, email, passwordHash string) (domain.User, error)
 
 	// Account

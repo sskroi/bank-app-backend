@@ -19,10 +19,10 @@ const (
 )
 
 type Handler struct {
-	service *service.Service
+	service *service.Services
 }
 
-func New(service *service.Service) *Handler {
+func New(service *service.Services) *Handler {
 	return &Handler{service}
 }
 
@@ -30,12 +30,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.Default()
 
 	apiV1 := router.Group(API_V1_ROUTE)
+	{
+		apiV1.POST("/auth/sign-up", h.signUp)
 
-	apiV1.POST("/auth/sign-up", h.SignUp)
-
-	// SWAGGER
-	// available on localhost:8080/api/v1/swagger/index.html
-	apiV1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		// SWAGGER
+		// available on localhost:8080/api/v1/swagger/index.html
+		apiV1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
 
 	return router
 }

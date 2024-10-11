@@ -6,6 +6,7 @@ import (
 	"bank-app-backend/internal/server"
 	"bank-app-backend/internal/service"
 	"bank-app-backend/internal/storage/postgres"
+	"bank-app-backend/pkg/hasher"
 	"context"
 	"log/slog"
 	"net/http"
@@ -35,8 +36,10 @@ func main() {
 		return
 	}
 
-	service := service.New(store)
-	handler := handler.New(service)
+	passwordHasher := hasher.NewBcryptHasher()
+
+	services := service.New(store, passwordHasher)
+	handler := handler.New(services)
 
 	server := new(server.Server)
 	go func() {

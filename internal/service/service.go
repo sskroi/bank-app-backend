@@ -1,28 +1,39 @@
 package service
 
-import "bank-app-backend/internal/storage"
+import (
+	"bank-app-backend/internal/storage"
+	"bank-app-backend/pkg/hasher"
 
-type Auth interface {
+	"golang.org/x/net/context"
+)
+
+type Users interface {
+	SignUp(ctx context.Context, input UsersSignUpInput) error
 }
 
-type User interface {
+type Accounts interface {
 }
 
-type Account interface {
+type Transactions interface {
 }
 
-type Transaction interface {
+type Services struct {
+	Users        Users
+	Accounts     Accounts
+	Transactions Transactions
 }
 
-type Service struct {
-	Auth
-	User
-	Account
-	Transaction
-}
-
-func New(store storage.Storage) *Service {
-	return &Service{
-		Auth: NewAuthService(store),
+func New(store storage.Storage, passwordHasher hasher.PasswdHasher) *Services {
+	return &Services{
+		Users: NewUserService(store, passwordHasher),
 	}
+}
+
+type UsersSignUpInput struct {
+	Email      string
+	Password   string
+	Passport   string
+	Name       string
+	Surname    string
+	Patronymic *string
 }

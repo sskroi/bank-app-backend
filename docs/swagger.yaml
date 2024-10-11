@@ -1,27 +1,40 @@
 basePath: /api/v1
 definitions:
-  handler.SignUpInput:
+  handler.response:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.signUpInput:
     properties:
       email:
         maxLength: 64
+        type: string
+      name:
+        maxLength: 64
+        minLength: 1
+        type: string
+      passport:
+        maxLength: 64
+        minLength: 8
         type: string
       password:
         maxLength: 64
         minLength: 8
         type: string
+      patronymic:
+        maxLength: 64
+        type: string
+      surname:
+        maxLength: 64
+        minLength: 1
+        type: string
     required:
     - email
+    - name
+    - passport
     - password
-    type: object
-  handler.SignUpResponse:
-    properties:
-      id:
-        type: string
-    type: object
-  handler.errResponse:
-    properties:
-      message:
-        type: string
+    - surname
     type: object
 host: localhost:8080
 info:
@@ -42,25 +55,29 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handler.SignUpInput'
+          $ref: '#/definitions/handler.signUpInput'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: user successfully created
           schema:
-            $ref: '#/definitions/handler.SignUpResponse'
+            $ref: '#/definitions/handler.response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handler.errResponse'
+            $ref: '#/definitions/handler.response'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handler.errResponse'
+            $ref: '#/definitions/handler.response'
+        "409":
+          description: user with such email already exists
+          schema:
+            $ref: '#/definitions/handler.response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.errResponse'
+            $ref: '#/definitions/handler.response'
       summary: Sign up
 swagger: "2.0"

@@ -35,33 +35,39 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handler.SignUpInput"
+                            "$ref": "#/definitions/handler.signUpInput"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "user successfully created",
                         "schema": {
-                            "$ref": "#/definitions/handler.SignUpResponse"
+                            "$ref": "#/definitions/handler.response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handler.errResponse"
+                            "$ref": "#/definitions/handler.response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handler.errResponse"
+                            "$ref": "#/definitions/handler.response"
+                        }
+                    },
+                    "409": {
+                        "description": "user with such email already exists",
+                        "schema": {
+                            "$ref": "#/definitions/handler.response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handler.errResponse"
+                            "$ref": "#/definitions/handler.response"
                         }
                     }
                 }
@@ -69,37 +75,51 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handler.SignUpInput": {
+        "handler.response": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.signUpInput": {
             "type": "object",
             "required": [
                 "email",
-                "password"
+                "name",
+                "passport",
+                "password",
+                "surname"
             ],
             "properties": {
                 "email": {
                     "type": "string",
                     "maxLength": 64
                 },
+                "name": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                },
+                "passport": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                },
                 "password": {
                     "type": "string",
                     "maxLength": 64,
                     "minLength": 8
-                }
-            }
-        },
-        "handler.SignUpResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "handler.errResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
                 }
             }
         }
