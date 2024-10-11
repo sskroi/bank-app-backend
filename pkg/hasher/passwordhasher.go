@@ -4,7 +4,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type PasswordHasher interface {
+// Password Hasher
+type PasswdHasher interface {
 	Hash(password string) (string, error)
 	Check(hashedPassowrd, password string) bool
 }
