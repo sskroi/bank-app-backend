@@ -1,13 +1,15 @@
 package storage
 
-import "bank-app-backend/internal/domain"
-
+import (
+	"bank-app-backend/internal/domain"
+	"context"
+)
 
 type Storage interface {
 	// Authorization
-	CreateUser(email, passwordHash, passport, name, surname string, patronymic *string) (domain.User, error)
-	GetUser(email, passwordHash string) (domain.User, error)
+	// ID, PublicID fields will be ignored
+	CreateUser(ctx context.Context, user domain.User) (domain.User, error)
+	GetUser(ctx context.Context, email, passwordHash string) (domain.User, error)
 
 	// Account
 }
-
