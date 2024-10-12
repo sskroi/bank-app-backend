@@ -21,7 +21,7 @@ import (
 // @BasePath		/api/v1
 // @license.name	MIT
 
-// @securityDefinitions.apikey UsersAuth
+// @securityDefinitions.apikey UserBearerAuth
 // @in header
 // @name Authorization
 func main() {
