@@ -37,13 +37,19 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	v1 := router.Group("/api/v1")
 	{
-		v1.POST("/auth/sign-up", h.signUp)
-		v1.POST("/auth/sign-in", h.signIn)
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/sign-up", h.signUp)
+			auth.POST("/sign-in", h.signIn)
+		}
 
 		// only authorized routes
-		auth := v1.Group("/", h.verifyAuth)
+		authOnly := v1.Group("/", h.verifyAuth)
 
-		auth.POST("/user/update-profile", h.updateUserProfile)
+		user := authOnly.Group("/user")
+		{
+			user.POST("/update-profile", h.updateUserProfile)
+		}
 
 		// SWAGGER
 		// available on localhost:8080/api/v1/swagger/index.html
@@ -53,7 +59,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	return router
 }
 
-// getUserPubId extracs `userPubId` key set in auth middleware from gin.Context 
+// getUserPubId extracs `userPubId` key set in auth middleware from gin.Context
 func getUserPubId(c *gin.Context) (uuid.UUID, error) {
 	userPubIdAny, ok := c.Get(userPubIdKey)
 	if !ok {
