@@ -1,4 +1,4 @@
-package handler
+package apihandler
 
 import (
 	"bank-app-backend/internal/domain"

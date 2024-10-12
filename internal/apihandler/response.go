@@ -1,4 +1,4 @@
-package handler
+package apihandler
 
 import (
 	"log/slog"
