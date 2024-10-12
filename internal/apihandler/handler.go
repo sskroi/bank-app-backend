@@ -32,6 +32,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	apiV1 := router.Group(API_V1_ROUTE)
 	{
 		apiV1.POST("/auth/sign-up", h.signUp)
+		apiV1.POST("/auth/sign-in", h.signIn)
 
 		// SWAGGER
 		// available on localhost:8080/api/v1/swagger/index.html

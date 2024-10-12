@@ -7,5 +7,8 @@ password = ""
 sslmode = "disable"
 timezone = "Europe/Moscow"
 
+[auth]
+jwtsignkey = ""
+
 [server]
 port = ""

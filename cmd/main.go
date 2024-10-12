@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bank-app-backend/internal/config"
 	"bank-app-backend/internal/apihandler"
+	"bank-app-backend/internal/config"
 	"bank-app-backend/internal/server"
 	"bank-app-backend/internal/service"
 	"bank-app-backend/internal/storage/postgres"
@@ -38,7 +38,7 @@ func main() {
 
 	passwordHasher := hasher.NewBcryptHasher()
 
-	services := service.New(store, passwordHasher)
+	services := service.New(store, passwordHasher, cfg.Auth.JwtSignKey)
 	handler := apihandler.New(services)
 
 	server := new(server.Server)

@@ -20,4 +20,5 @@ type User struct {
 
 var (
 	ErrUserAlreayExists = errors.New("user with such email already exists")
+	ErrInvalidLoginCredentials = errors.New("invalid login credentials")
 )

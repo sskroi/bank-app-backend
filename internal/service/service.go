@@ -9,6 +9,7 @@ import (
 
 type Users interface {
 	SignUp(ctx context.Context, input UsersSignUpInput) error
+	SignIn(ctx context.Context, email, password string) (Tokens, error)
 }
 
 type Accounts interface {
@@ -23,17 +24,9 @@ type Services struct {
 	Transactions Transactions
 }
 
-func New(store storage.Storage, passwordHasher hasher.PasswdHasher) *Services {
+func New(store storage.Storage, passwordHasher hasher.PasswdHasher, jwtSignKey string) *Services {
 	return &Services{
-		Users: NewUserService(store, passwordHasher),
+		Users: NewUserService(store, passwordHasher, jwtSignKey),
 	}
 }
 
-type UsersSignUpInput struct {
-	Email      string
-	Password   string
-	Passport   string
-	Name       string
-	Surname    string
-	Patronymic *string
-}

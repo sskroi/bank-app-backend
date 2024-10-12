@@ -11,10 +11,17 @@ const (
 	configPath = "./configs/config.toml"
 )
 
-type Config struct {
-	Postgres postgres.Config `toml:"postgres"`
-	Server   server.Config   `toml:"server"`
-}
+type (
+	Config struct {
+		Postgres postgres.Config `toml:"postgres"`
+		Server   server.Config   `toml:"server"`
+		Auth     Auth            `toml:"auth"`
+	}
+
+	Auth struct {
+		JwtSignKey string `toml:"jwtsignkey"`
+	}
+)
 
 func LoadConfig() (*Config, error) {
 	cfg := new(Config)

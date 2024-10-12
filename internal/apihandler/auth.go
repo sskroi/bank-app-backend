@@ -19,7 +19,7 @@ type signUpInput struct {
 }
 
 // @Summary		Sign up
-// @Description	register new user
+// @Description	Register new user
 // @Accept			json
 // @Produce		json
 // @Param			input	body		signUpInput	true	"sign up info"
@@ -33,7 +33,7 @@ func (h *Handler) signUp(c *gin.Context) {
 	var input signUpInput
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrResponse(c, http.StatusBadRequest, err, "invalid input body")
+		newErrResponse(c, http.StatusBadRequest, "invalid input body", err)
 		return
 	}
 
@@ -52,9 +52,52 @@ func (h *Handler) signUp(c *gin.Context) {
 			return
 		}
 
-		newErrResponse(c, http.StatusInternalServerError, err, "internal server error")
+		newErrResponse(c, http.StatusInternalServerError, "internal server error", err)
 		return
 	}
 
 	newResponse(c, http.StatusCreated, "success")
+}
+
+type signInInput struct {
+	Email    string `json:"email" binding:"required,email,max=64"`
+	Password string `json:"password" binding:"required,min=8,max=64"`
+}
+
+type tokenResponse struct { // signInResponse
+	AccessToken  string `json:"accessToken"`
+	// RefreshToken string `json:"refreshToken"`
+}
+
+// @Summary		Sign in
+// @Description	Authorizes the user
+// @Accept			json
+// @Produce		json
+// @Param			input	body		signInInput	true	"sign in info"
+// @Success		200		{object}	tokenResponse "user successfully authorized"
+// @Failure   401   {object}  response "invalid login credentials"
+// @Failure		400		{object}	response
+// @Failure		404		{object}	response
+// @Failure		500		{object}	response
+// @Router			/auth/sign-in [post]
+func (h *Handler) signIn(c *gin.Context) {
+	var input signInInput
+
+	if err := c.BindJSON(&input); err != nil {
+		newErrResponse(c, http.StatusBadRequest, "invalid input body", err)
+		return
+	}
+
+	tokens, err := h.service.Users.SignIn(c.Request.Context(), input.Email, input.Password)
+	if err != nil {
+		if errors.Is(err, domain.ErrInvalidLoginCredentials) {
+			newResponse(c, http.StatusUnauthorized, domain.ErrInvalidLoginCredentials.Error())
+			return
+		}
+
+		newErrResponse(c, http.StatusInternalServerError, "internal server error", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, tokenResponse{tokens.AccessToken})
 }

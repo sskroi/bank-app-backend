@@ -21,10 +21,17 @@ func (self *PgStorage) CreateUser(ctx context.Context, newUser domain.User) erro
 	return err
 }
 
-func (self *PgStorage) GetUser(ctx context.Context, email, passwordHash string) (domain.User, error) {
+func (self *PgStorage) GetUserByEmail(ctx context.Context, email string) (domain.User, error) {
 	user := domain.User{}
 
-	res := self.db.Where("email = ? AND password_hash = ?", email, passwordHash).WithContext(ctx).Find(&user)
+	res := self.db.Where("email = ?", email).WithContext(ctx).Find(&user)
+	if res.Error != nil {
+		return user, res.Error
+	}
 
-	return user, res.Error
+	if res.RowsAffected == 0 {
+		return user, domain.ErrInvalidLoginCredentials
+	}
+
+	return user, nil
 }
