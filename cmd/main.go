@@ -20,6 +20,10 @@ import (
 // @host			localhost:8080
 // @BasePath		/api/v1
 // @license.name	MIT
+
+// @securityDefinitions.apikey UsersAuth
+// @in header
+// @name Authorization
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)

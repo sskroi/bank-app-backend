@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"golang.org/x/net/context"
 )
 
@@ -34,7 +35,7 @@ type UsersSignUpInput struct {
 }
 
 type Tokens struct {
-	AccessToken  string
+	AccessToken string
 	// RefreshToken string
 }
 
@@ -70,9 +71,10 @@ func (s *UserService) SignIn(ctx context.Context, email, password string) (Token
 		return Tokens{}, domain.ErrInvalidLoginCredentials
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.PublicId,
-		"exp": time.Now().Add(time.Hour * 48).Unix(),
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+		Subject:   user.PublicId.String(),
+		IssuedAt:  jwt.NewNumericDate(time.Now()),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 48)),
 	})
 
 	accessToken, err := token.SignedString([]byte(s.jwtSignKey))
@@ -81,4 +83,24 @@ func (s *UserService) SignIn(ctx context.Context, email, password string) (Token
 	}
 
 	return Tokens{AccessToken: accessToken}, nil
+}
+
+func (s *UserService) VerifyAccessToken(ctx context.Context, accessToken string) (uuid.UUID, error) {
+	parsedToken, err := jwt.Parse(accessToken,
+		func(t *jwt.Token) (interface{}, error) { return []byte(s.jwtSignKey), nil })
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+
+	userPublicIdStr, err := parsedToken.Claims.GetSubject()
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+
+	userPublicId, err := uuid.Parse(userPublicIdStr)
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+
+	return userPublicId, nil
 }

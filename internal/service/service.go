@@ -4,12 +4,15 @@ import (
 	"bank-app-backend/internal/storage"
 	"bank-app-backend/pkg/hasher"
 
+	"github.com/google/uuid"
 	"golang.org/x/net/context"
 )
 
 type Users interface {
 	SignUp(ctx context.Context, input UsersSignUpInput) error
 	SignIn(ctx context.Context, email, password string) (Tokens, error)
+	// VerifyAccessToken verifies token and return user's public id if token is valid
+	VerifyAccessToken(ctx context.Context, accessToken string) (uuid.UUID, error)
 }
 
 type Accounts interface {
@@ -29,4 +32,3 @@ func New(store storage.Storage, passwordHasher hasher.PasswdHasher, jwtSignKey s
 		Users: NewUserService(store, passwordHasher, jwtSignKey),
 	}
 }
-

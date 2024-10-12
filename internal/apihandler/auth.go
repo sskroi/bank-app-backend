@@ -65,7 +65,7 @@ type signInInput struct {
 }
 
 type tokenResponse struct { // signInResponse
-	AccessToken  string `json:"accessToken"`
+	AccessToken string `json:"accessToken"`
 	// RefreshToken string `json:"refreshToken"`
 }
 
