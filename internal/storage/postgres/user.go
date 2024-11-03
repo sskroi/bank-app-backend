@@ -38,7 +38,6 @@ func (self *PgStorage) GetUserByEmail(ctx context.Context, email string) (domain
 }
 
 func (self *PgStorage) GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error) {
-	
 	user := domain.User{}
 	
 	res := self.db.Where("public_id = ?", userPubId).WithContext(

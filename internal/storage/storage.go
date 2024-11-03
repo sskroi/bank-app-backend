@@ -13,9 +13,7 @@ type Storage interface {
 	CreateUser(ctx context.Context, user domain.User) error
 	// returns domain.ErrInvalidLoginCredentials if there is no user with such email
 	GetUserByEmail(ctx context.Context, email string) (domain.User, error)
-	// returns domain.ErrInvalidLoginCredentials if there is no user with such id
-	// GetUserById(ctx context.Context, uid uint) (domain.User, error)
-	// returns domain.ErrUnknownUserPubId if there is no user with such public id
+	// GetUserId returns domain.ErrUnknownUserPubId if there is no user with such public id
 	GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error)
 
 	// Account
