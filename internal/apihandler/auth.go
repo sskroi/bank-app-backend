@@ -47,8 +47,8 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 
 	if err != nil {
-		if errors.Is(err, domain.ErrUserAlreayExists) {
-			newResponse(c, http.StatusConflict, domain.ErrUserAlreayExists.Error())
+		if errors.Is(err, domain.ErrUserAlreadyExists) {
+			newResponse(c, http.StatusConflict, domain.ErrUserAlreadyExists.Error())
 			return
 		}
 

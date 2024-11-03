@@ -4,7 +4,9 @@ import (
 	"bank-app-backend/internal/domain"
 	"context"
 	"errors"
+	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
@@ -15,7 +17,7 @@ func (self *PgStorage) CreateUser(ctx context.Context, newUser domain.User) erro
 	var pgErr *pgconn.PgError
 	// 23505 == unique_violation error
 	if errors.As(err, &pgErr) && pgErr.Code == "23505" {
-		return domain.ErrUserAlreayExists
+		return domain.ErrUserAlreadyExists
 	}
 
 	return err
@@ -35,3 +37,36 @@ func (self *PgStorage) GetUserByEmail(ctx context.Context, email string) (domain
 
 	return user, nil
 }
+
+func (self *PgStorage) GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error) {
+	fmt.Printf("userPubId: %s\n", userPubId)
+	
+	user := domain.User{}
+	
+	res := self.db.Where("public_id = ?", userPubId).WithContext(
+		ctx).Select("id").Find(&user)
+	if res.Error != nil {
+		return 0, res.Error
+	}
+
+	if res.RowsAffected == 0 {
+		return 0, domain.ErrUnknownUserPubId
+	}
+
+	return user.ID, nil
+}
+
+// func (self *PgStorage) GetUserById(ctx context.Context, uid uint) (domain.User, error) {
+// 	user := domain.User{}
+
+// 	res := self.db.Where("id = ?", uid).WithContext(ctx).Find(&user)
+// 	if res.Error != nil {
+// 		return user, res.Error
+// 	}
+
+// 	if res.RowsAffected == 0 {
+// 		return user, domain.ErrUnknownUserId
+// 	}
+
+// 	return user, nil
+// }
