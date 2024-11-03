@@ -13,7 +13,7 @@ import (
 
 // @Summary		Update user profile
 // @Description	Update all user profile info
-// @Security  UsersAuth
+// @Security  UserBearerAuth
 // @Accept	  json
 // @Produce		json
 // @Param			input	body		string	true	"new profile data and current password"
