@@ -4,7 +4,6 @@ import (
 	"bank-app-backend/internal/domain"
 	"bank-app-backend/internal/storage"
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	// "bank-app-backend/pkg/hasher"
@@ -32,7 +31,6 @@ func (s *AccountService) UserAccounts(ctx context.Context, userPubid uuid.UUID,
 	if err != nil {
 		return accounts, err
 	}
-	fmt.Printf("uid: %d", uid)
 
 	return s.store.GetUserAccounts(ctx, uid, offset, limit)
 }

@@ -4,7 +4,6 @@ import (
 	"bank-app-backend/internal/domain"
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -39,7 +38,6 @@ func (self *PgStorage) GetUserByEmail(ctx context.Context, email string) (domain
 }
 
 func (self *PgStorage) GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error) {
-	fmt.Printf("userPubId: %s\n", userPubId)
 	
 	user := domain.User{}
 	
