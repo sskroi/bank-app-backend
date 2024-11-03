@@ -31,7 +31,6 @@ func (s *AccountService) Create(
 		OwnerId: userId,
 		Currency: currency,
 	}
-	// fmt.Printf("%+v", newAccount)
 
 	if err := s.store.CreateAccount(ctx, &newAccount); err != nil {
 		return accountNumber, err
