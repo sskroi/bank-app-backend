@@ -33,8 +33,8 @@ func New(cfg Config) (*PgStorage, error) {
 	return &PgStorage{db}, nil
 }
 
-func (self *PgStorage) Close() error {
-	sqldb, err := self.db.DB()
+func (store *PgStorage) Close() error {
+	sqldb, err := store.db.DB()
 	if err != nil {
 	    return err
 	}

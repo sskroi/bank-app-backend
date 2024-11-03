@@ -7,7 +7,7 @@ import (
 	// "github.com/jackc/pgx/v5/pgconn"
 )
 
-func (self *PgStorage) GetUserAccounts(ctx context.Context, uid uint,
+func (store *PgStorage) GetUserAccounts(ctx context.Context, uid uint,
 		offset, limit int) ([]domain.Account, error) {
 	if limit == 0 || limit > 100 {
 		limit = 100
@@ -15,7 +15,7 @@ func (self *PgStorage) GetUserAccounts(ctx context.Context, uid uint,
 
 	var accounts []domain.Account
 
-	if res := self.db.Where("owner_id = ?", uid).WithContext(
+	if res := store.db.Where("owner_id = ?", uid).WithContext(
 			ctx).Offset(offset).Limit(limit).Find(&accounts); res.Error != nil {
 		return accounts, res.Error
 	}
