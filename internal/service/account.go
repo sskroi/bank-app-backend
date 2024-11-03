@@ -32,7 +32,6 @@ func (s *AccountService) UserAccounts(ctx context.Context, userPubid uuid.UUID,
 	if err != nil {
 		return accounts, err
 	}
-	fmt.Printf("uid: %d", userId)
 
 	return s.store.GetUserAccounts(ctx, userId, offset, limit)
 }

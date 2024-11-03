@@ -28,7 +28,6 @@ func (h *Handler) userAccounts(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("%s\n", h.service.Accounts)
 	accounts, err := h.service.Accounts.UserAccounts(
 		c.Request.Context(), userPubId, input.Offset, input.Limit)
 
