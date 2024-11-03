@@ -28,11 +28,11 @@ func (s *AccountService) UserAccounts(ctx context.Context, userPubid uuid.UUID,
 		offset, limit int) ([]domain.Account, error) {
 	var accounts []domain.Account
 
-	uid, err := s.store.GetUserId(ctx, userPubid)
+	userId, err := s.store.GetUserId(ctx, userPubid)
 	if err != nil {
 		return accounts, err
 	}
-	fmt.Printf("uid: %d", uid)
+	fmt.Printf("uid: %d", userId)
 
-	return s.store.GetUserAccounts(ctx, uid, offset, limit)
+	return s.store.GetUserAccounts(ctx, userId, offset, limit)
 }
