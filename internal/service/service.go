@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bank-app-backend/internal/domain"
 	"bank-app-backend/internal/storage"
 	"bank-app-backend/pkg/hasher"
 
@@ -16,6 +17,9 @@ type Users interface {
 }
 
 type Accounts interface {
+	// Create(ctx context.Context, uid int) error
+	UserAccounts(ctx context.Context, userPubId uuid.UUID, offset, limit int) ([]domain.Account, error)
+	// GetBalance(ctxt context.Context) (decimal.Decimal, error)
 }
 
 type Transactions interface {
@@ -30,5 +34,6 @@ type Services struct {
 func New(store storage.Storage, passwordHasher hasher.PasswdHasher, jwtSignKey string) *Services {
 	return &Services{
 		Users: NewUserService(store, passwordHasher, jwtSignKey),
+		Accounts: NewAccountService(store),
 	}
 }

@@ -13,6 +13,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	// "github.com/google/uuid"
 )
 
 // @title			Backend part of educational banking application
