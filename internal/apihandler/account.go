@@ -8,9 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const DefaultAccountsLimit int = 100
+
 type userAccountsInput struct {
-	Offset	   int     `json:"offset" binding:"omitempty,gte=0"`
-	Limit	   int	   `json:"limit" binding:"omitempty,gte=0"`
+	Offset	   int     `binding:"gte=0"`
+	Limit	   int	   `binding:"gte=0,lte=100"`
 }
 
 func (h *Handler) userAccounts(c *gin.Context) {
@@ -25,6 +27,10 @@ func (h *Handler) userAccounts(c *gin.Context) {
 	if err != nil {
 		newResponse(c, http.StatusConflict, err.Error())
 		return
+	}
+
+	if input.Limit == 0 {
+		input.Limit = DefaultAccountsLimit
 	}
 
 	accounts, err := h.service.Accounts.UserAccounts(
