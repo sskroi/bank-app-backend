@@ -3,6 +3,7 @@ package domain
 import (
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+	"errors"
 )
 
 type Account struct {
@@ -13,3 +14,7 @@ type Account struct {
 	Currency string          `gorm:"column:currency" json:"currency"`
 	IsClose  bool            `gorm:"column:is_close" json:"is_close"`
 }
+
+var (
+	ErrUnknownCurrency = errors.New("unknown currency")
+)

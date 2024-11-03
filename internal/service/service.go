@@ -17,7 +17,7 @@ type Users interface {
 }
 
 type Accounts interface {
-	// Create(ctx context.Context, uid int) error
+	Create(ctx context.Context, userPubId uuid.UUID, currency string) (uuid.UUID, error)
 	UserAccounts(ctx context.Context, userPubId uuid.UUID, offset, limit int) ([]domain.Account, error)
 	// GetBalance(ctxt context.Context) (decimal.Decimal, error)
 }
