@@ -29,6 +29,8 @@ func New(service *service.Services) *Handler {
 	return &Handler{service}
 }
 
+// TODO: return detailed error messages from API
+
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
@@ -49,6 +51,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		user := authOnly.Group("/user")
 		{
 			user.POST("/update-profile", h.updateUserProfile)
+			user.POST("/accounts", h.createAccount)
 			user.GET("/accounts", h.userAccounts)
 		}
 

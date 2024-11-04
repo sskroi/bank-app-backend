@@ -17,6 +17,7 @@ type Storage interface {
 	GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error)
 
 	// Account
-	// ID will be ignored
-	GetUserAccounts(ctx context.Context, uid uint, offset, limit int) ([]domain.Account, error)
+	// ID, Number will be ignored
+	CreateAccount(ctx context.Context, account *domain.Account) error
+	GetUserAccounts(ctx context.Context, userId uint, offset, limit int) ([]domain.Account, error)
 }
