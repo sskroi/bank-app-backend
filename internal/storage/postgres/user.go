@@ -47,7 +47,7 @@ func (store *PgStorage) GetUserId(ctx context.Context, userPubId uuid.UUID) (uin
 	}
 
 	if res.RowsAffected == 0 {
-		return 0, domain.ErrUnknownUserPubId
+		return 0, domain.ErrUserDeleted
 	}
 
 	return user.ID, nil

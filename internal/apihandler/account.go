@@ -46,8 +46,8 @@ func (h *Handler) createAccount(c *gin.Context) {
 	accountNumber, err := h.service.Accounts.Create(
 		c.Request.Context(), userPubId, currency)
 	if err != nil {
-		if errors.Is(err, domain.ErrUnknownUserPubId) {
-			newResponse(c, http.StatusBadRequest, domain.ErrUnknownUserPubId.Error())
+		if errors.Is(err, domain.ErrUserDeleted) {
+			newResponse(c, http.StatusConflict, domain.ErrUserDeleted.Error())
 			return
 		}
 
@@ -85,8 +85,8 @@ func (h *Handler) userAccounts(c *gin.Context) {
 		c.Request.Context(), userPubId, input.Offset, input.Limit)
 
 	if err != nil {
-		if errors.Is(err, domain.ErrUnknownUserPubId) {
-			newResponse(c, http.StatusConflict, domain.ErrUnknownUserPubId.Error())
+		if errors.Is(err, domain.ErrUserDeleted) {
+			newResponse(c, http.StatusConflict, domain.ErrUserDeleted.Error())
 			return
 		}
 
