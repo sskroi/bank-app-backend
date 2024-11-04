@@ -51,8 +51,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		user := authOnly.Group("/user")
 		{
 			user.POST("/update-profile", h.updateUserProfile)
-			user.POST("/accounts", h.createAccount)
-			user.GET("/accounts", h.userAccounts)
+		}
+
+		account := authOnly.Group("/account")
+		{
+			account.POST("/", h.createAccount)
+			account.GET("/", h.userAccounts)
 		}
 
 		// SWAGGER
