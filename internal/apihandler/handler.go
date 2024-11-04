@@ -56,7 +56,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		account := authOnly.Group("/account")
 		{
 			account.POST("/", h.createAccount)
-			account.GET("/", h.userAccounts)
+		}
+
+		accounts := authOnly.Group("/accounts")
+		{
+			accounts.GET("/", h.userAccounts)
 		}
 
 		// SWAGGER
