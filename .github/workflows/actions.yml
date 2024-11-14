@@ -35,6 +35,9 @@ jobs:
           key: golangci-lint-${{ runner.os }}-golangci-lint-${{ hashFiles('**/go.mod') }}
           restore-keys: golangci-lint-${{ runner.os }}-golangci-lint-
           path: ${{ steps.golangci-lint-cache-status.outputs.dir }}
+      - name: Initialize Go Work
+        run: |
+          go work init
       - name: Run golangci-lint
         # Note that we filter some packages since they use type parameters and
         # currently they are not supported in Go SSA analysis tooling. See also
