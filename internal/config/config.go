@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	configPath = "./configs/config.toml"
+	configPath = "configs/config.toml"
 )
 
 type (
