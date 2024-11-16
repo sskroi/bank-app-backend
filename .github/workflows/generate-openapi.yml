@@ -32,7 +32,7 @@ jobs:
           git diff --cached --quiet || git commit -m "Update OpenAPI documentation"
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@v0.8.0
         with:
           branch: ${{ github.ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
