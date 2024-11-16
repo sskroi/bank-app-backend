@@ -127,6 +127,72 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/update-profile": {
+            "post": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "description": "Update all user profile info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update user profile",
+                "parameters": [
+                    {
+                        "description": "new profile data and current password",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully updated",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "401": {
+                        "description": "incorrect current password",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "409": {
+                        "description": "user with such email already exists",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -203,6 +269,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "UserBearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

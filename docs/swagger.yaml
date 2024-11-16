@@ -134,4 +134,51 @@ paths:
           schema:
             $ref: '#/definitions/apihandler.response'
       summary: Sign up
+  /user/update-profile:
+    post:
+      consumes:
+      - application/json
+      description: Update all user profile info
+      parameters:
+      - description: new profile data and current password
+        in: body
+        name: input
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully updated
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "401":
+          description: incorrect current password
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "409":
+          description: user with such email already exists
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Update user profile
+securityDefinitions:
+  UserBearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
