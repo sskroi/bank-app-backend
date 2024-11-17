@@ -21,4 +21,4 @@ jobs:
         script: |
           cd ~/bank-app-backend
           git pull
-          docker-compose up -d --build
+          docker compose up -d --build
