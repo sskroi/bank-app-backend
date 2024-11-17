@@ -20,5 +20,5 @@ jobs:
         port: ${{ secrets.VPS_DEPLOY_PORT }}
         script: |
           cd ~/bank-app-backend
-          git pull
+          git pull origin main
           docker compose up -d --build
