@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    network_mode: bridge
+    ports:
+      - "8080:8080"
+    environment:
+      - BANK_APP_MODE=release
+    restart: no
