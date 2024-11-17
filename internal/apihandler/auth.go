@@ -22,11 +22,11 @@ type signUpInput struct {
 // @Description	Register new user
 // @Accept			json
 // @Produce		json
-// @Param			input	body		signUpInput	true	"sign up info"
-// @Success		201		{object}	response "user successfully created"
+// @Param			input	body		signUpInput	true	"Sign up info"
+// @Success		201		{object}	response "User successfully created"
 // @Failure		400		{object}	response
 // @Failure		404		{object}	response
-// @Failure   409   {object}  response "user with such email already exists"
+// @Failure   409   {object}  response "User with such email already exists"
 // @Failure		500		{object}	response
 // @Router			/auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
@@ -73,9 +73,9 @@ type tokenResponse struct { // signInResponse
 // @Description	Authorizes the user
 // @Accept			json
 // @Produce		json
-// @Param			input	body		signInInput	true	"sign in info"
-// @Success		200		{object}	tokenResponse "user successfully authorized"
-// @Failure   401   {object}  response "invalid login credentials"
+// @Param			input	body		signInInput	true	"Sign in info"
+// @Success		200		{object}	tokenResponse "User successfully authorized"
+// @Failure   401   {object}  response "Invalid login credentials"
 // @Failure		400		{object}	response
 // @Failure		404		{object}	response
 // @Failure		500		{object}	response

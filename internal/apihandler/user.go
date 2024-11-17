@@ -16,12 +16,12 @@ import (
 // @Security  UserBearerAuth
 // @Accept	  json
 // @Produce		json
-// @Param			input	body		string	true	"new profile data and current password"
-// @Success		200		{object}	response "successfully updated"
-// @Failure		401		{object}	response "incorrect current password"
+// @Param			input	body		string	true	"New profile data and current password"
+// @Success		200		{object}	response "Successfully updated"
+// @Failure		401		{object}	response "Incorrect current password"
 // @Failure		400		{object}	response
 // @Failure		404		{object}	response
-// @Failure		409		{object}	response "user with such email already exists"
+// @Failure		409		{object}	response "User with such email already exists"
 // @Failure		500		{object}	response
 // @Router			/user/update-profile [post]
 func (h *Handler) updateUserProfile(c *gin.Context) {
