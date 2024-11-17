@@ -3,6 +3,7 @@ package apihandler
 import (
 	"bank-app-backend/internal/service"
 	"errors"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -32,6 +33,11 @@ func New(service *service.Services) *Handler {
 // TODO: return detailed error messages from API
 
 func (h *Handler) InitRoutes() *gin.Engine {
+	appMode := os.Getenv("BANK_APP_MODE")
+	if appMode == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	router := gin.New()
 
 	router.Use(gin.Recovery())
@@ -63,9 +69,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			accounts.GET("/", h.userAccounts)
 		}
 
-		// SWAGGER
-		// available on localhost:8080/api/v1/swagger/index.html
-		v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		appMode := os.Getenv("BANK_APP_MODE")
+		if appMode != "release" || true {
+			// SWAGGER
+			// available on localhost:{port}/api/v1/swagger/index.html
+			v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+		}
 	}
 
 	return router

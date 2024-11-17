@@ -12,3 +12,5 @@ jwtsignkey = ""
 
 [server]
 port = ""
+cert = ""
+key = ""

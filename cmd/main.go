@@ -13,7 +13,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
 	// "github.com/google/uuid"
 )
 
@@ -33,13 +32,13 @@ func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		slog.Error("can't load config", "err", err)
-		return
+		os.Exit(1)
 	}
 
 	store, err := postgres.New(cfg.Postgres)
 	if err != nil {
 		slog.Error("can't connect to database", "err", err)
-		return
+		os.Exit(1)
 	}
 
 	passwordHasher := hasher.NewBcryptHasher()
@@ -47,17 +46,26 @@ func main() {
 	services := service.New(store, passwordHasher, cfg.Auth.JwtSignKey)
 	handler := apihandler.New(services)
 
+	// Server start
 	server := new(server.Server)
+	quit := make(chan os.Signal, 1)
+	badStart := false
 	go func() {
-		err := server.Run(cfg.Server, handler.InitRoutes())
+		mode := os.Getenv("BANK_APP_MODE")
+		var err error
+		if mode == "release" {
+			err = server.RunTLS(cfg.Server, handler.InitRoutes())
+		} else {
+			err = server.Run(cfg.Server, handler.InitRoutes())
+		}
 		if err != nil && err != http.ErrServerClosed {
 			slog.Error("error occured while running http server", "err", err)
+			badStart = true
+			quit <- syscall.SIGTERM
 		}
 	}()
-
 	slog.Info("app started", "port", cfg.Server.Port)
 
-	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
@@ -66,8 +74,11 @@ func main() {
 	if err := server.Shutdown(context.Background()); err != nil {
 		slog.Error("error occured on server shutting down", "err", err)
 	}
-
 	if err := store.Close(); err != nil {
 		slog.Error("error occured on db connection close", "err", err)
+	}
+
+	if badStart {
+		os.Exit(1)
 	}
 }
