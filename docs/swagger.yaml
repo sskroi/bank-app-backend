@@ -1,5 +1,17 @@
 basePath: /api/v1
 definitions:
+  apihandler.createAccountInput:
+    properties:
+      currency:
+        type: string
+    required:
+    - currency
+    type: object
+  apihandler.createAccountResponse:
+    properties:
+      number:
+        type: string
+    type: object
   apihandler.response:
     properties:
       message:
@@ -62,13 +74,55 @@ info:
   title: Backend part of educational banking application
   version: "1.0"
 paths:
+  /account:
+    post:
+      consumes:
+      - application/json
+      description: Creates bank account
+      parameters:
+      - description: Account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/apihandler.createAccountInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/apihandler.createAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "403":
+          description: User deleted or banned
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Create bank account
   /auth/sign-in:
     post:
       consumes:
       - application/json
       description: Authorizes the user
       parameters:
-      - description: sign in info
+      - description: Sign in info
         in: body
         name: input
         required: true
@@ -78,7 +132,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: user successfully authorized
+          description: User successfully authorized
           schema:
             $ref: '#/definitions/apihandler.tokenResponse'
         "400":
@@ -86,7 +140,7 @@ paths:
           schema:
             $ref: '#/definitions/apihandler.response'
         "401":
-          description: invalid login credentials
+          description: Invalid login credentials
           schema:
             $ref: '#/definitions/apihandler.response'
         "404":
@@ -104,7 +158,7 @@ paths:
       - application/json
       description: Register new user
       parameters:
-      - description: sign up info
+      - description: Sign up info
         in: body
         name: input
         required: true
@@ -114,7 +168,7 @@ paths:
       - application/json
       responses:
         "201":
-          description: user successfully created
+          description: User successfully created
           schema:
             $ref: '#/definitions/apihandler.response'
         "400":
@@ -126,7 +180,7 @@ paths:
           schema:
             $ref: '#/definitions/apihandler.response'
         "409":
-          description: user with such email already exists
+          description: User with such email already exists
           schema:
             $ref: '#/definitions/apihandler.response'
         "500":
@@ -140,7 +194,7 @@ paths:
       - application/json
       description: Update all user profile info
       parameters:
-      - description: new profile data and current password
+      - description: New profile data and current password
         in: body
         name: input
         required: true
@@ -150,7 +204,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: successfully updated
+          description: Successfully updated
           schema:
             $ref: '#/definitions/apihandler.response'
         "400":
@@ -158,7 +212,7 @@ paths:
           schema:
             $ref: '#/definitions/apihandler.response'
         "401":
-          description: incorrect current password
+          description: Incorrect current password
           schema:
             $ref: '#/definitions/apihandler.response'
         "404":
@@ -166,7 +220,7 @@ paths:
           schema:
             $ref: '#/definitions/apihandler.response'
         "409":
-          description: user with such email already exists
+          description: User with such email already exists
           schema:
             $ref: '#/definitions/apihandler.response'
         "500":

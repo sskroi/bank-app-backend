@@ -18,6 +18,72 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account": {
+            "post": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "description": "Creates bank account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create bank account",
+                "parameters": [
+                    {
+                        "description": "Account info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.createAccountInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.createAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "403": {
+                        "description": "User deleted or banned",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/sign-in": {
             "post": {
                 "description": "Authorizes the user",
@@ -30,7 +96,7 @@ const docTemplate = `{
                 "summary": "Sign in",
                 "parameters": [
                     {
-                        "description": "sign in info",
+                        "description": "Sign in info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -41,7 +107,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "user successfully authorized",
+                        "description": "User successfully authorized",
                         "schema": {
                             "$ref": "#/definitions/apihandler.tokenResponse"
                         }
@@ -53,7 +119,7 @@ const docTemplate = `{
                         }
                     },
                     "401": {
-                        "description": "invalid login credentials",
+                        "description": "Invalid login credentials",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
@@ -85,7 +151,7 @@ const docTemplate = `{
                 "summary": "Sign up",
                 "parameters": [
                     {
-                        "description": "sign up info",
+                        "description": "Sign up info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -96,7 +162,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "user successfully created",
+                        "description": "User successfully created",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
@@ -114,7 +180,7 @@ const docTemplate = `{
                         }
                     },
                     "409": {
-                        "description": "user with such email already exists",
+                        "description": "User with such email already exists",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
@@ -145,7 +211,7 @@ const docTemplate = `{
                 "summary": "Update user profile",
                 "parameters": [
                     {
-                        "description": "new profile data and current password",
+                        "description": "New profile data and current password",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -156,7 +222,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "successfully updated",
+                        "description": "Successfully updated",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
@@ -168,7 +234,7 @@ const docTemplate = `{
                         }
                     },
                     "401": {
-                        "description": "incorrect current password",
+                        "description": "Incorrect current password",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
@@ -180,7 +246,7 @@ const docTemplate = `{
                         }
                     },
                     "409": {
-                        "description": "user with such email already exists",
+                        "description": "User with such email already exists",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
@@ -196,6 +262,25 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "apihandler.createAccountInput": {
+            "type": "object",
+            "required": [
+                "currency"
+            ],
+            "properties": {
+                "currency": {
+                    "type": "string"
+                }
+            }
+        },
+        "apihandler.createAccountResponse": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
         "apihandler.response": {
             "type": "object",
             "properties": {
