@@ -1,0 +1,24 @@
+name: Deploy to VPS
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Deploy app
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ secrets.VPS_DEPLOY_IP }}
+        username: ${{ secrets.VPS_DEPLOY_USER }}
+        key: ${{ secrets.VPS_DEPLOY_KEY }}
+        port: ${{ secrets.VPS_DEPLOY_PORT }}
+        script: |
+          cd ~/bank-app-backend
+          git pull
+          docker-compose up -d --build
