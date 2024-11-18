@@ -20,7 +20,7 @@ type signUpInput struct {
 
 // @Summary		Sign up
 // @Description	Register new user
-// @Accept			json
+// @Accept		json
 // @Produce		json
 // @Param			input	body		signUpInput	true	"Sign up info"
 // @Success		201		{object}	response "User successfully created"
@@ -71,7 +71,7 @@ type tokenResponse struct { // signInResponse
 
 // @Summary		Sign in
 // @Description	Authorizes the user
-// @Accept			json
+// @Accept		json
 // @Produce		json
 // @Param			input	body		signInInput	true	"Sign in info"
 // @Success		200		{object}	tokenResponse "User successfully authorized"

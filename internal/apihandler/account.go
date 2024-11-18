@@ -11,21 +11,20 @@ import (
 
 const DefaultAccountsLimit int = 100
 
-var Currencies = [...]string{"rub", "usd", "eur", "cny"}
+var Currencies = [...]string{"rub"}
 
 type createAccountInput struct {
-	Currency string `binding:"required,len=3"`
+	Currency string `json:"currency" binding:"required,len=3" enums:"rub"`
 }
 type createAccountResponse struct {
 	Number string `json:"number"`
 }
 
 // @Summary		Create bank account
-// @Description	Creates bank account
 // @Security  UserBearerAuth
-// @Accept			json
+// @Accept		json
 // @Produce		json
-// @Param			input	body		createAccountInput	true	"Account info"
+// @Param			input	body		  createAccountInput	true	"Account info"
 // @Success		201		{object}	createAccountResponse
 // @Failure		400		{object}	response
 // @Failure   401   {object}  response
@@ -76,15 +75,28 @@ func (h *Handler) createAccount(c *gin.Context) {
 }
 
 type userAccountsInput struct {
-	Offset int `binding:"gte=0"`
-	Limit  int `binding:"gte=0,lte=100"`
+	Offset int `form:"offset" binding:"gte=0"`
+	Limit  int `form:"limit" binding:"gte=0,lte=100"`
 }
 
+// @Summary		Get all user's accounts
+// @Security  UserBearerAuth
+// @Accept		json
+// @Produce		json
+// @Param			offset query		int	  false	"Offset" minimum(0)
+// @Param			limit  query		int	  false	"Limit"  minimum(0) maximum(100)
+// @Success		200		{array}	  domain.Account
+// @Failure		400		{object}	response
+// @Failure   401   {object}  response
+// @Failure   403   {object}  response "User deleted or banned"
+// @Failure		404		{object}	response
+// @Failure		500		{object}	response
+// @Router			/accounts [get]
 func (h *Handler) userAccounts(c *gin.Context) {
 	var input userAccountsInput
 
-	if err := c.BindJSON(&input); err != nil {
-		newErrResponse(c, http.StatusBadRequest, "invalid input body", err)
+	if err := c.BindQuery(&input); err != nil {
+		newErrResponse(c, http.StatusBadRequest, "invalid input", err)
 		return
 	}
 

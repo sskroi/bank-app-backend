@@ -12,7 +12,6 @@ import (
 // }
 
 // @Summary		Update user profile
-// @Description	Update all user profile info
 // @Security  UserBearerAuth
 // @Accept	  json
 // @Produce		json
