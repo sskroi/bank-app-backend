@@ -1,11 +1,6 @@
 name: Deploy to VPS
 on:
-  workflow_run:
-    workflows: ['golangci-lint']
-    types:
-      - completed
-    branches:
-      - 'main'
+  workflow_dispatch
 
 jobs:
   deploy:
