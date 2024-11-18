@@ -3,6 +3,8 @@ definitions:
   apihandler.createAccountInput:
     properties:
       currency:
+        enum:
+        - rub
         type: string
     required:
     - currency
@@ -66,6 +68,17 @@ definitions:
       accessToken:
         type: string
     type: object
+  domain.Account:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+      is_close:
+        type: boolean
+      number:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -78,7 +91,6 @@ paths:
     post:
       consumes:
       - application/json
-      description: Creates bank account
       parameters:
       - description: Account info
         in: body
@@ -116,6 +128,54 @@ paths:
       security:
       - UserBearerAuth: []
       summary: Create bank account
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Offset
+        in: query
+        minimum: 0
+        name: offset
+        type: integer
+      - description: Limit
+        in: query
+        maximum: 100
+        minimum: 0
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Account'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "403":
+          description: User deleted or banned
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Get all user's accounts
   /auth/sign-in:
     post:
       consumes:
@@ -192,7 +252,6 @@ paths:
     post:
       consumes:
       - application/json
-      description: Update all user profile info
       parameters:
       - description: New profile data and current password
         in: body

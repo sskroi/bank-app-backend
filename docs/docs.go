@@ -25,7 +25,6 @@ const docTemplate = `{
                         "UserBearerAuth": []
                     }
                 ],
-                "description": "Creates bank account",
                 "consumes": [
                     "application/json"
                 ],
@@ -49,6 +48,80 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/apihandler.createAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "403": {
+                        "description": "User deleted or banned",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts": {
+            "get": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all user's accounts",
+                "parameters": [
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Account"
+                            }
                         }
                     },
                     "400": {
@@ -201,7 +274,6 @@ const docTemplate = `{
                         "UserBearerAuth": []
                     }
                 ],
-                "description": "Update all user profile info",
                 "consumes": [
                     "application/json"
                 ],
@@ -269,7 +341,10 @@ const docTemplate = `{
             ],
             "properties": {
                 "currency": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "rub"
+                    ]
                 }
             }
         },
@@ -351,6 +426,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "accessToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Account": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "is_close": {
+                    "type": "boolean"
+                },
+                "number": {
                     "type": "string"
                 }
             }
