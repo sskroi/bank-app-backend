@@ -6,10 +6,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Deploy app
+    - name: Deploy through ssh in docker container
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.VPS_DEPLOY_IP }}
@@ -17,6 +14,6 @@ jobs:
         key: ${{ secrets.VPS_DEPLOY_KEY }}
         port: ${{ secrets.VPS_DEPLOY_PORT }}
         script: |
-          cd ~/bank-app-backend
+          cd ~/apps/bank-app-backend
           git pull origin main
           docker compose up -d --build
