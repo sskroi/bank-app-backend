@@ -51,13 +51,7 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	badStart := false
 	go func() {
-		mode := os.Getenv("BANK_APP_MODE")
-		var err error
-		if mode == "release" {
-			err = server.RunTLS(cfg.Server, handler.InitRoutes())
-		} else {
-			err = server.Run(cfg.Server, handler.InitRoutes())
-		}
+		err := server.Run(cfg.Server, handler.InitRoutes())
 		if err != nil && err != http.ErrServerClosed {
 			slog.Error("error occured while running http server", "err", err)
 			badStart = true

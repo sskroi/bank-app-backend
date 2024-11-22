@@ -11,9 +11,10 @@ type Server struct {
 }
 
 type Config struct {
-	Port     string `toml:"port"`
-	CertFile string `toml:"cert"`
-	KeyFile  string `toml:"key"`
+	Port       string `toml:"port"`
+	TLSEnabled bool   `toml:"tls_enabled"`
+	CertFile   string `toml:"cert"`
+	KeyFile    string `toml:"key"`
 }
 
 func getServer(cfg Config, handler http.Handler) *http.Server {
@@ -28,12 +29,12 @@ func getServer(cfg Config, handler http.Handler) *http.Server {
 
 func (s *Server) Run(cfg Config, handler http.Handler) error {
 	s.httpServer = getServer(cfg, handler)
-	return s.httpServer.ListenAndServe()
-}
 
-func (s *Server) RunTLS(cfg Config, handler http.Handler) error {
-	s.httpServer = getServer(cfg, handler)
-	return s.httpServer.ListenAndServeTLS(cfg.CertFile, cfg.KeyFile)
+	if cfg.TLSEnabled {
+		return s.httpServer.ListenAndServeTLS(cfg.CertFile, cfg.KeyFile)
+	} else {
+		return s.httpServer.ListenAndServe()
+	}
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {

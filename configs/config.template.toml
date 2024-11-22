@@ -12,5 +12,6 @@ jwtsignkey = ""
 
 [server]
 port = ""
+tls_enabled = false
 cert = ""
 key = ""
