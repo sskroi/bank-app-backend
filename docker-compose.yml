@@ -3,7 +3,7 @@ services:
     build: .
     network_mode: bridge
     ports:
-      - "8080:8080"
+      - "8100:8100"
     environment:
       - BANK_APP_MODE=release
       - BANK_APP_SWAGGER_ENABLED=1
