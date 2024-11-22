@@ -16,9 +16,9 @@ import (
 	// "github.com/google/uuid"
 )
 
-// @title			Backend part of educational banking application
-// @version		1.0
-// @host			localhost:8080
+// @title			  Backend part of educational banking application
+// @version		  1.0
+// @host			  https://bankapi.iorkss.ru
 // @BasePath		/api/v1
 // @license.name	MIT
 

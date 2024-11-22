@@ -71,7 +71,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		// SWAGGER
 		appMode := os.Getenv("BANK_APP_SWAGGER_ENABLED")
 		if appMode == "1" {
-			// available on localhost:{port}/api/v1/swagger/index.html
+			// available on {HOST}/api/v1/swagger/index.html
 			v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 		}
