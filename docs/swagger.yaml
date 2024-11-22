@@ -79,7 +79,7 @@ definitions:
       number:
         type: string
     type: object
-host: https://bankapi.iorkss.ru
+host: bankapi.iorkss.ru
 info:
   contact: {}
   license:

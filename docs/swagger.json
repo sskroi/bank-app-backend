@@ -8,7 +8,7 @@
         },
         "version": "1.0"
     },
-    "host": "https://bankapi.iorkss.ru",
+    "host": "bankapi.iorkss.ru",
     "basePath": "/api/v1",
     "paths": {
         "/account": {
