@@ -6,14 +6,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    - name: Deploy through ssh in docker container
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ secrets.VPS_DEPLOY_IP }}
-        username: ${{ secrets.VPS_DEPLOY_USER }}
-        key: ${{ secrets.VPS_DEPLOY_KEY }}
-        port: ${{ secrets.VPS_DEPLOY_PORT }}
-        script: |
-          cd ~/apps/bank-app-backend
-          git pull origin main
-          docker compose up -d --build
+    steps:
+      - name: Deploy through ssh in docker container
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_DEPLOY_IP }}
+          username: ${{ secrets.VPS_DEPLOY_USER }}
+          key: ${{ secrets.VPS_DEPLOY_KEY }}
+          port: ${{ secrets.VPS_DEPLOY_PORT }}
+          script: |
+            cd ~/apps/bank-app-backend
+            git pull origin main
+            docker compose up -d --build
