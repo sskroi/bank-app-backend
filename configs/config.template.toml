@@ -11,7 +11,7 @@ timezone = "Europe/Moscow"
 jwtsignkey = ""
 
 [server]
-port = ""
+address = "127.0.0.1:8080"
 tls_enabled = false
 cert = ""
 key = ""

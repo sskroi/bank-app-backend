@@ -58,7 +58,7 @@ func main() {
 			quit <- syscall.SIGTERM
 		}
 	}()
-	slog.Info("app started", "port", cfg.Server.Port)
+	slog.Info("app started", "address", cfg.Server.Address)
 
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit

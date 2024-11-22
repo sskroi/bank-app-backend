@@ -11,7 +11,7 @@ type Server struct {
 }
 
 type Config struct {
-	Port       string `toml:"port"`
+	Address    string `toml:"address"`
 	TLSEnabled bool   `toml:"tls_enabled"`
 	CertFile   string `toml:"cert"`
 	KeyFile    string `toml:"key"`
@@ -19,7 +19,7 @@ type Config struct {
 
 func getServer(cfg Config, handler http.Handler) *http.Server {
 	return &http.Server{
-		Addr:           ":" + cfg.Port,
+		Addr:           cfg.Address,
 		Handler:        handler,
 		MaxHeaderBytes: 1 << 20, // 1 MB
 		ReadTimeout:    10 * time.Second,
