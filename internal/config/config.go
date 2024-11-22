@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+
 	"github.com/BurntSushi/toml"
 
 	"bank-app-backend/internal/server"
@@ -8,7 +10,7 @@ import (
 )
 
 const (
-	configPath = "configs/config.toml"
+	defaultConfigPath = "configs/config.toml"
 )
 
 type (
@@ -24,6 +26,11 @@ type (
 )
 
 func LoadConfig() (*Config, error) {
+	configPath := os.Getenv("BANK_APP_CONFIG_PATH")
+	if configPath == "" {
+		configPath = defaultConfigPath
+	}
+
 	cfg := new(Config)
 
 	_, err := toml.DecodeFile(configPath, cfg)
