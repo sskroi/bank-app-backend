@@ -3,17 +3,19 @@ package main
 import (
 	"bank-app-backend/internal/apihandler"
 	"bank-app-backend/internal/config"
+	"context"
+
 	"bank-app-backend/internal/server"
 	"bank-app-backend/internal/service"
 	"bank-app-backend/internal/storage/postgres"
+
 	"bank-app-backend/pkg/hasher"
-	"context"
 	"log/slog"
 	"net/http"
 	"os"
+
 	"os/signal"
 	"syscall"
-	// "github.com/google/uuid"
 )
 
 // @title			  Backend part of educational banking application

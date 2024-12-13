@@ -17,4 +17,5 @@ type Account struct {
 
 var (
 	ErrUnknownCurrency = errors.New("unknown currency")
+	ErrUnknownAccount = errors.New("unknown account")
 )

@@ -30,3 +30,21 @@ func (store *PgStorage) GetUserAccounts(ctx context.Context, userId uint,
 
 	return accounts, nil
 }
+
+func (store *PgStorage) GetAccountCurrency(
+		ctx context.Context, accId uint,
+		notFoundErr error) (string, error) {
+	var acc domain.Account
+
+	res := store.db.Select("currency").Where(
+		"id = ?", accId).WithContext(ctx).Find(&acc)
+	err := res.Error
+	if err == nil && res.RowsAffected == 0 {
+		if notFoundErr != nil {
+			err = notFoundErr
+		} else {
+			err = domain.ErrUnknownAccount
+		}
+	}
+	return acc.Currency, err
+}

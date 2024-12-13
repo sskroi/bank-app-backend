@@ -14,7 +14,7 @@ CREATE TABLE accounts (
   id SERIAL PRIMARY KEY,
   number UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
   owner_id INTEGER NOT NULL,
-  balance DECIMAL(20, 2) NOT NULL DEFAULT 0.00,
+  balance DECIMAL(20, 2) NOT NULL DEFAULT 0.00 CHECK (balance >= 0),
   currency VARCHAR(16) NOT NULL,
   is_close BOOLEAN NOT NULL DEFAULT false,
   FOREIGN KEY (owner_id) REFERENCES users(id)
@@ -26,7 +26,8 @@ CREATE TABLE transactions (
   public_id UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
   sender_account_id INTEGER NOT NULL,
   receiver_account_id INTEGER NOT NULL,
-  amount DECIMAL(20, 2) NOT NULL,
+  sent DECIMAL (20, 2) NOT NULL,
+  received DECIMAL(20, 2) NOT NULL,
   is_conversion BOOLEAN NOT NULL DEFAULT false,
   conversion_rate DECIMAL(16, 4),
   FOREIGN KEY (sender_account_id) REFERENCES accounts(id)
