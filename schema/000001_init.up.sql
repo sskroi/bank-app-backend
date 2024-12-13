@@ -28,9 +28,17 @@ CREATE TABLE transactions (
   receiver_account_id INTEGER NOT NULL,
   amount DECIMAL(20, 2) NOT NULL,
   is_conversion BOOLEAN NOT NULL DEFAULT false,
-  conversion_rate DECIMAL(14, 2),
+  conversion_rate DECIMAL(16, 4),
   FOREIGN KEY (sender_account_id) REFERENCES accounts(id)
   ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (receiver_account_id) REFERENCES accounts(id)
   ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE conversion_rates (
+  currency_from CHAR(3),
+  currency_to CHAR(3),
+  rate DECIMAL(16, 4),
+  dt_updated TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (currency_from, currency_to)
 );
