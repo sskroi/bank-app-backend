@@ -7,6 +7,8 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
+	
+	"github.com/shopspring/decimal"
 )
 
 type Users interface {
@@ -23,6 +25,9 @@ type Accounts interface {
 }
 
 type Transactions interface {
+	Create(ctx context.Context,
+		   userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
+		   amount decimal.Decimal) (domain.Transaction, error)
 }
 
 type Services struct {

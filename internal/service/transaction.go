@@ -1,0 +1,55 @@
+package service
+
+import (
+	"bank-app-backend/internal/domain"
+	"bank-app-backend/internal/storage"
+	"context"
+
+	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
+
+	"fmt"
+)
+
+type TransactionService struct {
+	store storage.Storage
+}
+
+func NewTransactionService(store storage.Storage) *TransactionService {
+	return &TransactionService{
+		store: store,
+	}
+}
+
+func (s TransactionService) Create(
+		ctx context.Context,
+		userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
+		amount decimal.Decimal) (domain.Transaction, error) {
+	fmt.Println("I'm in TransactionService::Create")
+	
+	newTransaction := domain.Transaction{
+		Sent: amount,
+	}
+
+	senderId, err := s.store.GetUserId(ctx, userPubId)
+	if err != nil {
+		return newTransaction, err
+	}
+
+	senderAcc, err := s.store.GetAccountByNumber(
+		ctx, senderAccNumber, senderId, domain.ErrUnknownSender)
+	if err != nil {
+		return newTransaction, err
+	}
+	newTransaction.SenderAccId = senderAcc.ID
+
+	receiverAcc, err := s.store.GetAccountByNumber(
+		ctx, receiverAccNumber, 0, domain.ErrUnknownReceiver)
+	if err != nil {
+		return newTransaction, err
+	}
+	newTransaction.ReceiverAccId = receiverAcc.ID
+
+	err = s.store.CreateTransaction(ctx, senderAcc, receiverAcc, &newTransaction)
+	return newTransaction, err
+}

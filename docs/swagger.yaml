@@ -14,6 +14,36 @@ definitions:
       number:
         type: string
     type: object
+  apihandler.createTransactionInput:
+    properties:
+      amount:
+        type: number
+      receiver_account_number:
+        type: string
+      sender_account_number:
+        type: string
+    required:
+    - amount
+    - receiver_account_number
+    - sender_account_number
+    type: object
+  apihandler.createTransactionResponse:
+    properties:
+      conversion_rate:
+        type: number
+      is_conversion:
+        type: boolean
+      public_id:
+        type: string
+      received:
+        type: number
+      receiver_account_number:
+        type: string
+      sender_account_number:
+        type: string
+      sent:
+        type: number
+    type: object
   apihandler.response:
     properties:
       message:
@@ -248,6 +278,43 @@ paths:
           schema:
             $ref: '#/definitions/apihandler.response'
       summary: Sign up
+  /transaction:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Transaction info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/apihandler.createTransactionInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/apihandler.createTransactionResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "403":
+          description: User deleted or banned
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Receiver or sender account not foundr
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Create transaction
   /user/update-profile:
     post:
       consumes:

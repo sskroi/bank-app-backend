@@ -38,7 +38,9 @@ func (store *PgStorage) ConvertCurrency(val decimal.Decimal,
 }
 
 func (store *PgStorage) CreateTransaction(
-		ctx context.Context, newTransaction *domain.Transaction) error {
+		ctx context.Context,
+		senderAcc, receiverAcc domain.Account,
+		newTransaction *domain.Transaction) error {
 	if newTransaction.SenderAccId == newTransaction.ReceiverAccId {
 		return domain.ErrSelfAccount
 	}
@@ -46,16 +48,8 @@ func (store *PgStorage) CreateTransaction(
 		return domain.ErrInvalidAmount
 	}
 
-	senderCurrency, err := store.GetAccountCurrency(
-		ctx, newTransaction.SenderAccId, domain.ErrUnknownSender)
-	if err != nil {
-		return err
-	}
-	receiverCurrency, err := store.GetAccountCurrency(
-		ctx, newTransaction.ReceiverAccId, domain.ErrUnknownReceiver)
-	if err != nil {
-		return err
-	}
+	senderCurrency, receiverCurrency := senderAcc.Currency, receiverAcc.Currency
+	var err error
 
 	if senderCurrency != receiverCurrency {
 		newTransaction.Received, newTransaction.ConversionRate, err = store.ConvertCurrency(

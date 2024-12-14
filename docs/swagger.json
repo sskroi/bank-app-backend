@@ -260,6 +260,65 @@
                 }
             }
         },
+        "/transaction": {
+            "post": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create transaction",
+                "parameters": [
+                    {
+                        "description": "Transaction info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.createTransactionInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.createTransactionResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "403": {
+                        "description": "User deleted or banned",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Receiver or sender account not foundr",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/update-profile": {
             "post": {
                 "security": [
@@ -346,6 +405,51 @@
             "properties": {
                 "number": {
                     "type": "string"
+                }
+            }
+        },
+        "apihandler.createTransactionInput": {
+            "type": "object",
+            "required": [
+                "amount",
+                "receiver_account_number",
+                "sender_account_number"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "receiver_account_number": {
+                    "type": "string"
+                },
+                "sender_account_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "apihandler.createTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "conversion_rate": {
+                    "type": "number"
+                },
+                "is_conversion": {
+                    "type": "boolean"
+                },
+                "public_id": {
+                    "type": "string"
+                },
+                "received": {
+                    "type": "number"
+                },
+                "receiver_account_number": {
+                    "type": "string"
+                },
+                "sender_account_number": {
+                    "type": "string"
+                },
+                "sent": {
+                    "type": "number"
                 }
             }
         },

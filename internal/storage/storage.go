@@ -20,4 +20,10 @@ type Storage interface {
 	// ID, Number will be ignored
 	CreateAccount(ctx context.Context, account *domain.Account) error
 	GetUserAccounts(ctx context.Context, userId uint, offset, limit int) ([]domain.Account, error)
+	GetAccountByNumber(ctx context.Context, number uuid.UUID, ownerId uint, notFoundErr error) (domain.Account, error)
+
+	// Transaction
+	CreateTransaction(ctx context.Context,
+					  senderAcc, receiverAcc domain.Account,
+					  newTransaction *domain.Transaction) error
 }
