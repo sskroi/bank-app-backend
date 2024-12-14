@@ -176,6 +176,35 @@ paths:
       security:
       - UserBearerAuth: []
       summary: Get all user's accounts
+  /auth/check:
+    post:
+      description: Checks the validity of access token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token is valid
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "401":
+          description: Token is invalid
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Check
   /auth/sign-in:
     post:
       consumes:

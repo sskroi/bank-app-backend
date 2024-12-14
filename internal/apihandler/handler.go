@@ -53,6 +53,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		// only authorized routes
 		authOnly := v1.Group("/", h.verifyAuth)
+		authOnly.POST("/auth/check", h.check)
 
 		user := authOnly.Group("/user")
 		{

@@ -101,3 +101,22 @@ func (h *Handler) signIn(c *gin.Context) {
 
 	c.JSON(http.StatusOK, tokenResponse{tokens.AccessToken})
 }
+
+// @Summary		Check
+// @Description	Checks the validity of access token
+// @Security  UserBearerAuth
+// @Produce		json
+// @Success		200		{object}	response "Token is valid"
+// @Failure		401   {object}  response "Token is invalid"
+// @Failure		400		{object}	response
+// @Failure		404		{object}	response
+// @Failure		500		{object}	response
+// @Router			/auth/check [post]
+func (h *Handler) check(c *gin.Context) {
+	_, err := getUserPubId(c)
+	if err != nil {
+		newErrResponse(c, http.StatusInternalServerError, "internal server error", err)
+	}
+
+	c.JSON(http.StatusOK, response{"token is valid"})
+}
