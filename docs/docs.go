@@ -471,17 +471,17 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "amount",
-                "receiver_account_number",
-                "sender_account_number"
+                "receiverAccountNumber",
+                "senderAccountNumber"
             ],
             "properties": {
                 "amount": {
                     "type": "number"
                 },
-                "receiver_account_number": {
+                "receiverAccountNumber": {
                     "type": "string"
                 },
-                "sender_account_number": {
+                "senderAccountNumber": {
                     "type": "string"
                 }
             }
@@ -489,22 +489,22 @@ const docTemplate = `{
         "apihandler.createTransactionResponse": {
             "type": "object",
             "properties": {
-                "conversion_rate": {
+                "conversionRate": {
                     "type": "number"
                 },
-                "is_conversion": {
+                "isConversion": {
                     "type": "boolean"
                 },
-                "public_id": {
+                "publicId": {
                     "type": "string"
                 },
                 "received": {
                     "type": "number"
                 },
-                "receiver_account_number": {
+                "receiverAccountNumber": {
                     "type": "string"
                 },
-                "sender_account_number": {
+                "senderAccountNumber": {
                     "type": "string"
                 },
                 "sent": {

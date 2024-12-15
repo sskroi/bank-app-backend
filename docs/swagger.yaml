@@ -18,28 +18,28 @@ definitions:
     properties:
       amount:
         type: number
-      receiver_account_number:
+      receiverAccountNumber:
         type: string
-      sender_account_number:
+      senderAccountNumber:
         type: string
     required:
     - amount
-    - receiver_account_number
-    - sender_account_number
+    - receiverAccountNumber
+    - senderAccountNumber
     type: object
   apihandler.createTransactionResponse:
     properties:
-      conversion_rate:
+      conversionRate:
         type: number
-      is_conversion:
+      isConversion:
         type: boolean
-      public_id:
+      publicId:
         type: string
       received:
         type: number
-      receiver_account_number:
+      receiverAccountNumber:
         type: string
-      sender_account_number:
+      senderAccountNumber:
         type: string
       sent:
         type: number
