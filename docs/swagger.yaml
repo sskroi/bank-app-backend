@@ -122,9 +122,10 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Number
+      - description: Account number
         in: query
         name: number
+        required: true
         type: string
       produces:
       - application/json

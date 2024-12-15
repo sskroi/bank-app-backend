@@ -98,9 +98,10 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Number",
+                        "description": "Account number",
                         "name": "number",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
