@@ -45,7 +45,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(cors.New(cors.Config{
 		// hard coded
-		AllowOrigins:     []string{"https://iorkss.ru"},
+		// AllowOrigins:     []string{"https://iorkss.ru"},
+		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{},
