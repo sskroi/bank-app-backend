@@ -345,6 +345,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/apihandler.createTransactionResponse"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
@@ -358,7 +364,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Receiver or sender account not foundr",
+                        "description": "Receiver or sender account not found",
                         "schema": {
                             "$ref": "#/definitions/apihandler.response"
                         }
