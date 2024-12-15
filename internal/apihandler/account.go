@@ -83,7 +83,7 @@ type closeAccountInput struct {
 // @Security  UserBearerAuth
 // @Accept		json
 // @Produce		json
-// @Param			number query		uuid	  false	"Number"
+// @Param			number query		string	  false	"Number"
 // @Success		200		{object}	  response
 // @Failure		400		{object}	response
 // @Failure   401   {object}  response
