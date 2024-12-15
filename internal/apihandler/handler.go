@@ -81,7 +81,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		transaction := authOnly.Group("/transaction")
 		{
-			transaction.POST("/", h.createTransaction)
+			transaction.POST("", h.createTransaction)
 		}
 
 		// SWAGGER

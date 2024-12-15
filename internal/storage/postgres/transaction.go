@@ -104,5 +104,8 @@ func (store *PgStorage) CreateTransaction(
 		return err
 	}
 
+	store.db.Select("public_id").Where(
+		"id = ?", newTransaction.ID).WithContext(ctx).Find(&newTransaction)
+
 	return nil
 }

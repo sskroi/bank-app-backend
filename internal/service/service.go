@@ -40,5 +40,6 @@ func New(store storage.Storage, passwordHasher hasher.PasswdHasher, jwtSignKey s
 	return &Services{
 		Users: NewUserService(store, passwordHasher, jwtSignKey),
 		Accounts: NewAccountService(store),
+		Transactions: NewTransactionService(store),
 	}
 }

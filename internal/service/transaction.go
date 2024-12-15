@@ -7,8 +7,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
-
-	"fmt"
 )
 
 type TransactionService struct {
@@ -25,8 +23,6 @@ func (s TransactionService) Create(
 		ctx context.Context,
 		userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
 		amount decimal.Decimal) (domain.Transaction, error) {
-	fmt.Println("I'm in TransactionService::Create")
-	
 	newTransaction := domain.Transaction{
 		Sent: amount,
 	}

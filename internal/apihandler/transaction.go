@@ -8,8 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
-
-	"fmt"
 )
 
 const DefaultTransactionsLimit int = 100
@@ -35,6 +33,7 @@ type createTransactionResponse struct {
 // @Produce		json
 // @Param			input	body		  createTransactionInput	true	"Transaction info"
 // @Success		201		{object}	createTransactionResponse
+// @Failure   400   {object}  response
 // @Failure   401   {object}  response
 // @Failure   403   {object}  response "User deleted or banned"
 // @Failure		404		{object}	response "Receiver or sender account not found"
@@ -47,8 +46,6 @@ func (h *Handler) createTransaction(c *gin.Context) {
 		newErrResponse(c, http.StatusBadRequest, "invalid input body", err)
 		return
 	}
-
-	fmt.Printf("%+v\n", input)
 
 	userPubId, err := getUserPubId(c)
 	if err != nil {
@@ -65,7 +62,9 @@ func (h *Handler) createTransaction(c *gin.Context) {
 			return
 		}
 		var statusCode int
-		if errors.Is(err, domain.ErrUnknownSender) || errors.Is(err, domain.ErrUnknownReceiver) {
+		if errors.Is(err, domain.ErrSelfAccount) || errors.Is(err, domain.ErrInvalidAmount) {
+			statusCode = http.StatusBadRequest
+		} else if errors.Is(err, domain.ErrUnknownSender) || errors.Is(err, domain.ErrUnknownReceiver) {
 			statusCode = http.StatusNotFound
 		} else if errors.Is(err, domain.ErrNegativeSenderBalance) {
 			statusCode = http.StatusForbidden
