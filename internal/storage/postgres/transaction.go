@@ -32,7 +32,9 @@ func (store *PgStorage) ConvertCurrency(val decimal.Decimal,
 	}
 
 	var ratePtr *decimal.Decimal
-	rows.Scan(&ratePtr)
+	if err := rows.Scan(&ratePtr); err != nil {
+		return res, rate, err
+	}
 	rate = *ratePtr
 	return val.Mul(rate), rate, nil
 }
