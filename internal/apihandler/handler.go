@@ -46,10 +46,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.Use(cors.New(cors.Config{
 		// hard coded
 		// AllowOrigins:     []string{"https://iorkss.ru"},
-		AllowAllOrigins:  true,
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{},
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:    []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:   []string{},
 		// AllowCredentials: true,
 	}))
 
@@ -62,7 +62,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 
 		// only authorized routes
-		authOnly := v1.Group("/", h.verifyAuth)
+		authOnly := v1.Group("", h.verifyAuth)
 		authOnly.POST("/auth/check", h.check)
 
 		user := authOnly.Group("/user")
@@ -72,11 +72,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		account := authOnly.Group("/account")
 		{
-			account.POST("/", h.createAccount)
+			account.POST("", h.createAccount)
 		}
 		accounts := authOnly.Group("/accounts")
 		{
-			accounts.GET("/", h.userAccounts)
+			accounts.GET("", h.userAccounts)
 		}
 
 		// SWAGGER
