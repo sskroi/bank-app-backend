@@ -150,6 +150,52 @@
                 }
             }
         },
+        "/auth/check": {
+            "post": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "description": "Checks the validity of access token",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Check",
+                "responses": {
+                    "200": {
+                        "description": "Token is valid",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "401": {
+                        "description": "Token is invalid",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/sign-in": {
             "post": {
                 "description": "Authorizes the user",

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
@@ -42,6 +43,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
+	router.Use(cors.New(cors.Config{
+		// hard coded
+		// AllowOrigins:     []string{"https://iorkss.ru"},
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:    []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:   []string{},
+		// AllowCredentials: true,
+	}))
 
 	v1 := router.Group("/api/v1")
 	{
@@ -52,7 +62,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 
 		// only authorized routes
-		authOnly := v1.Group("/", h.verifyAuth)
+		authOnly := v1.Group("", h.verifyAuth)
+		authOnly.POST("/auth/check", h.check)
 
 		user := authOnly.Group("/user")
 		{
@@ -61,11 +72,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		account := authOnly.Group("/account")
 		{
-			account.POST("/", h.createAccount)
+			account.POST("", h.createAccount)
 		}
 		accounts := authOnly.Group("/accounts")
 		{
-			accounts.GET("/", h.userAccounts)
+			accounts.GET("", h.userAccounts)
 		}
 
 		transaction := authOnly.Group("/transaction")
