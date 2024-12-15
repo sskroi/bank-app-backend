@@ -19,6 +19,7 @@ type Storage interface {
 	// Account
 	// ID, Number will be ignored
 	CreateAccount(ctx context.Context, account *domain.Account) error
+	CloseAccount(ctx context.Context, number uuid.UUID, ownerId uint) error
 	GetUserAccounts(ctx context.Context, userId uint, offset, limit int) ([]domain.Account, error)
 	GetAccountByNumber(ctx context.Context, number uuid.UUID, ownerId uint, notFoundErr error) (domain.Account, error)
 

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 const DefaultAccountsLimit int = 100
@@ -72,6 +73,55 @@ func (h *Handler) createAccount(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, createAccountResponse{accountNumber.String()})
+}
+
+type closeAccountInput struct {
+	Number string `form:"number" binding:"required"`
+}
+
+// @Summary		Close account
+// @Security  UserBearerAuth
+// @Accept		json
+// @Produce		json
+// @Param			number query		uuid	  false	"Number"
+// @Success		200		{object}	  response
+// @Failure		400		{object}	response
+// @Failure   401   {object}  response
+// @Failure		403		{object}	response
+// @Failure		404		{object}	response
+// @Failure		500		{object}	response
+// @Router			/account [delete]
+func (h* Handler) closeAccount(c *gin.Context) {
+	var input closeAccountInput
+
+	if err := c.BindQuery(&input); err != nil {
+		newErrResponse(c, http.StatusBadRequest, "invalid input", err)
+		return
+	}
+	number, err := uuid.Parse(input.Number)
+	if err != nil {
+		newResponse(c, http.StatusBadRequest, "invalid number format")
+		return
+	}
+
+	userPubId, err := getUserPubId(c)
+	if err != nil {
+		newResponse(c, http.StatusConflict, err.Error())
+		return
+	}
+
+	if err := h.service.Accounts.Close(
+			c.Request.Context(), userPubId, number); err != nil {
+		if errors.Is(err, domain.ErrAlreadyClose) || errors.Is(err, domain.ErrClose) {
+			newResponse(c, http.StatusForbidden, err.Error())
+		} else if errors.Is(err, domain.ErrUnknownAccount) {
+			newResponse(c, http.StatusNotFound, err.Error())
+		} else {
+			newErrResponse(c, http.StatusInternalServerError, "internal server error", err)
+		}
+	} else {
+		newResponse(c, http.StatusOK, "success")
+	}
 }
 
 type userAccountsInput struct {

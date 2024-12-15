@@ -73,6 +73,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		account := authOnly.Group("/account")
 		{
 			account.POST("", h.createAccount)
+			account.DELETE("", h.closeAccount)
 		}
 		accounts := authOnly.Group("/accounts")
 		{

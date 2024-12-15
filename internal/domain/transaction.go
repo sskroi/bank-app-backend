@@ -27,4 +27,6 @@ var (
 	ErrSenderBalance = errors.New("could not update transaction sender balance")
 	ErrReceiverBalance = errors.New("could not update transaction receiver balance")
 	ErrUnknownTransaction = errors.New("could not create transaction")
+	ErrSenderAccountClose = errors.New("sender account is close")
+	ErrReceiverAccountClose = errors.New("receiver account is close")
 )

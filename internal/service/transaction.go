@@ -37,12 +37,18 @@ func (s TransactionService) Create(
 	if err != nil {
 		return newTransaction, err
 	}
+	if senderAcc.IsClose {
+		return newTransaction, domain.ErrSenderAccountClose
+	}
 	newTransaction.SenderAccId = senderAcc.ID
 
 	receiverAcc, err := s.store.GetAccountByNumber(
 		ctx, receiverAccNumber, 0, domain.ErrUnknownReceiver)
 	if err != nil {
 		return newTransaction, err
+	}
+	if receiverAcc.IsClose {
+		return newTransaction, domain.ErrReceiverAccountClose
 	}
 	newTransaction.ReceiverAccId = receiverAcc.ID
 

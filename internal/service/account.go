@@ -39,6 +39,15 @@ func (s *AccountService) Create(
 	return newAccount.Number, err
 }
 
+func (s *AccountService) Close(ctx context.Context,
+		userPubId, number uuid.UUID) error {
+	userId, err := s.store.GetUserId(ctx, userPubId)
+	if err != nil {
+		return err
+	}
+	return s.store.CloseAccount(ctx, number, userId)
+}
+
 func (s *AccountService) UserAccounts(ctx context.Context, userPubId uuid.UUID,
 		offset, limit int) ([]domain.Account, error) {
 	var accounts []domain.Account
