@@ -12,7 +12,7 @@ type Account struct {
 	OwnerId  uint            `gorm:"column:owner_id" json:"-"`
 	Balance  decimal.Decimal `gorm:"column:balance" json:"balance"`
 	Currency string          `gorm:"column:currency" json:"currency"`
-	IsClose  bool            `gorm:"column:is_close" json:"is_close"`
+	IsClose  bool            `gorm:"column:is_close" json:"isClose"`
 }
 
 var (

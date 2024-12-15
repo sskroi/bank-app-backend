@@ -13,18 +13,18 @@ import (
 const DefaultTransactionsLimit int = 100
 
 type createTransactionInput struct {
-	SenderAccNumber		uuid.UUID		`json:"sender_account_number" binding:"required"`
-	ReceiverAccNumber 	uuid.UUID 		`json:"receiver_account_number" binding:"required"`
+	SenderAccNumber		uuid.UUID		`json:"senderAccountNumber" binding:"required"`
+	ReceiverAccNumber 	uuid.UUID 		`json:"receiverAccountNumber" binding:"required"`
 	Amount 				decimal.Decimal `json:"amount" binding:"required"`
 }
 type createTransactionResponse struct {
-	PublicId		  uuid.UUID 	  `json:"public_id"`
-	SenderAccNumber   uuid.UUID		  `json:"sender_account_number"`
-	ReceiverAccNumber uuid.UUID 	  `json:"receiver_account_number"`
+	PublicId		  uuid.UUID 	  `json:"publicId"`
+	SenderAccNumber   uuid.UUID		  `json:"senderAccountNumber"`
+	ReceiverAccNumber uuid.UUID 	  `json:"receiverAccountNumber"`
 	Sent			  decimal.Decimal `json:"sent"`
 	Received		  decimal.Decimal `json:"received"`
-	IsConversion	  bool			  `json:"is_conversion"`
-	ConversionRate	  decimal.Decimal `json:"conversion_rate"`
+	IsConversion	  bool			  `json:"isConversion"`
+	ConversionRate	  decimal.Decimal `json:"conversionRate"`
 }
 
 // @Summary		Create transaction
