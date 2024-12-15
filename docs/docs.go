@@ -88,9 +88,6 @@ const docTemplate = `{
                         "UserBearerAuth": []
                     }
                 ],
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -150,9 +147,6 @@ const docTemplate = `{
                     {
                         "UserBearerAuth": []
                     }
-                ],
-                "consumes": [
-                    "application/json"
                 ],
                 "produces": [
                     "application/json"

@@ -81,7 +81,6 @@ type closeAccountInput struct {
 
 // @Summary		Close account
 // @Security  UserBearerAuth
-// @Accept		json
 // @Produce		json
 // @Param			number query		string	  true	"Account number"
 // @Success		200		{object}	  response
@@ -131,7 +130,6 @@ type userAccountsInput struct {
 
 // @Summary		Get all user's accounts
 // @Security  UserBearerAuth
-// @Accept		json
 // @Produce		json
 // @Param			offset query		int	  false	"Offset" minimum(0)
 // @Param			limit  query		int	  false	"Limit"  minimum(0) maximum(100)

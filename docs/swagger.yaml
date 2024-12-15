@@ -119,8 +119,6 @@ info:
 paths:
   /account:
     delete:
-      consumes:
-      - application/json
       parameters:
       - description: Account number
         in: query
@@ -199,8 +197,6 @@ paths:
       summary: Create bank account
   /accounts:
     get:
-      consumes:
-      - application/json
       parameters:
       - description: Offset
         in: query
