@@ -595,7 +595,7 @@ const docTemplate = `{
                 "currency": {
                     "type": "string"
                 },
-                "is_close": {
+                "isClose": {
                     "type": "boolean"
                 },
                 "number": {
