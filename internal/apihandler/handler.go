@@ -67,6 +67,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		user := authOnly.Group("/user")
 		{
+			user.GET("", h.getUser)
 			user.POST("/update-profile", h.updateUserProfile)
 		}
 

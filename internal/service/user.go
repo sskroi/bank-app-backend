@@ -104,3 +104,7 @@ func (s *UserService) VerifyAccessToken(ctx context.Context, accessToken string)
 
 	return userPublicId, nil
 }
+
+func (s *UserService) Get(ctx context.Context, userPubId uuid.UUID) (domain.User, error) {
+	return s.store.GetUser(ctx, userPubId)
+}

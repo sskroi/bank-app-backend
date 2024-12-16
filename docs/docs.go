@@ -433,6 +433,39 @@ const docTemplate = `{
                 }
             }
         },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get user info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "403": {
+                        "description": "User deleted or banned",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/update-profile": {
             "post": {
                 "security": [
@@ -654,6 +687,32 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "isInactive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passport": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "publicId": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }

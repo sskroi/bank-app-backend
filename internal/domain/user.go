@@ -7,15 +7,15 @@ import (
 )
 
 type User struct {
-	ID           uint      `gorm:"column:id;primaryKey"`
-	PublicId     uuid.UUID `gorm:"column:public_id"`
-	Email        string    `gorm:"column:email"`
-	PasswordHash string    `gorm:"column:password_hash"`
-	Passport     string    `gorm:"column:passport"`
-	Name         string    `gorm:"column:name"`
-	Surname      string    `gorm:"column:surname"`
-	Patronymic   *string   `gorm:"column:patronymic"`
-	IsInactive   bool      `gorm:"column:is_inactive"`
+	ID           uint      `gorm:"column:id;primaryKey" json:"-"`
+	PublicId     uuid.UUID `gorm:"column:public_id" json:"publicId"`
+	Email        string    `gorm:"column:email" json:"email"`
+	PasswordHash string    `gorm:"column:password_hash" json:"-"`
+	Passport     string    `gorm:"column:passport" json:"passport"`
+	Name         string    `gorm:"column:name" json:"name"`
+	Surname      string    `gorm:"column:surname" json:"surname"`
+	Patronymic   *string   `gorm:"column:patronymic" json:"patronymic"`
+	IsInactive   bool      `gorm:"column:is_inactive" json:"isInactive"`
 }
 
 var (
