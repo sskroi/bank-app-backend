@@ -18,4 +18,6 @@ type Account struct {
 var (
 	ErrUnknownCurrency = errors.New("unknown currency")
 	ErrUnknownAccount = errors.New("unknown account")
+	ErrAlreadyClose = errors.New("account is already close")
+	ErrClose = errors.New("could not close account")
 )

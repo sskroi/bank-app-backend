@@ -66,7 +66,9 @@ func (h *Handler) createTransaction(c *gin.Context) {
 			statusCode = http.StatusBadRequest
 		} else if errors.Is(err, domain.ErrUnknownSender) || errors.Is(err, domain.ErrUnknownReceiver) {
 			statusCode = http.StatusNotFound
-		} else if errors.Is(err, domain.ErrNegativeSenderBalance) {
+		} else if errors.Is(err, domain.ErrNegativeSenderBalance) ||
+				errors.Is(err, domain.ErrSenderAccountClose) ||
+				errors.Is(err, domain.ErrReceiverAccountClose) {
 			statusCode = http.StatusForbidden
 		} else {
 			newErrResponse(c, http.StatusInternalServerError, "internal server error", err)

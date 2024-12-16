@@ -16,10 +16,12 @@ type Users interface {
 	SignIn(ctx context.Context, email, password string) (Tokens, error)
 	// VerifyAccessToken verifies token and return user's public id if token is valid
 	VerifyAccessToken(ctx context.Context, accessToken string) (uuid.UUID, error)
+	Get(ctx context.Context, userPubId uuid.UUID) (domain.User, error)
 }
 
 type Accounts interface {
 	Create(ctx context.Context, userPubId uuid.UUID, currency string) (uuid.UUID, error)
+	Close(ctx context.Context, userPubId, number uuid.UUID) (error)
 	UserAccounts(ctx context.Context, userPubId uuid.UUID, offset, limit int) ([]domain.Account, error)
 	// GetBalance(ctxt context.Context) (decimal.Decimal, error)
 }

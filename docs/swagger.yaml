@@ -109,6 +109,23 @@ definitions:
       number:
         type: string
     type: object
+  domain.User:
+    properties:
+      email:
+        type: string
+      isInactive:
+        type: boolean
+      name:
+        type: string
+      passport:
+        type: string
+      patronymic:
+        type: string
+      publicId:
+        type: string
+      surname:
+        type: string
+    type: object
 host: bankapi.iorkss.ru
 info:
   contact: {}
@@ -118,6 +135,43 @@ info:
   version: "1.0"
 paths:
   /account:
+    delete:
+      parameters:
+      - description: Account number
+        in: query
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Close account
     post:
       consumes:
       - application/json
@@ -160,8 +214,6 @@ paths:
       summary: Create bank account
   /accounts:
     get:
-      consumes:
-      - application/json
       parameters:
       - description: Offset
         in: query
@@ -348,6 +400,26 @@ paths:
       security:
       - UserBearerAuth: []
       summary: Create transaction
+  /user:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "403":
+          description: User deleted or banned
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Get user info
   /user/update-profile:
     post:
       consumes:

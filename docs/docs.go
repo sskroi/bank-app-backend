@@ -81,6 +81,64 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Close account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account number",
+                        "name": "number",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
             }
         },
         "/accounts": {
@@ -89,9 +147,6 @@ const docTemplate = `{
                     {
                         "UserBearerAuth": []
                     }
-                ],
-                "consumes": [
-                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -378,6 +433,39 @@ const docTemplate = `{
                 }
             }
         },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get user info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "403": {
+                        "description": "User deleted or banned",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/update-profile": {
             "post": {
                 "security": [
@@ -599,6 +687,32 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "isInactive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passport": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "publicId": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }

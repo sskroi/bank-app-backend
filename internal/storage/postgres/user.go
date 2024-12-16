@@ -22,6 +22,20 @@ func (store *PgStorage) CreateUser(ctx context.Context, newUser domain.User) err
 	return err
 }
 
+func (store *PgStorage) GetUser(
+		ctx context.Context, userPubId uuid.UUID) (domain.User, error) {
+	var user domain.User
+	res := store.db.Omit("id").Where(
+		"public_id = ?", userPubId).WithContext(ctx).Find(&user)
+	if res.Error != nil {
+		return user, res.Error
+	}
+	if res.RowsAffected == 0 {
+		return user, domain.ErrUserDeleted
+	}
+	return user, nil
+}
+
 func (store *PgStorage) GetUserByEmail(ctx context.Context, email string) (domain.User, error) {
 	user := domain.User{}
 
