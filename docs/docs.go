@@ -777,10 +777,10 @@ const docTemplate = `{
                 "conversionRate": {
                     "type": "number"
                 },
-                "isConversion": {
-                    "type": "boolean"
+                "direction": {
+                    "type": "integer"
                 },
-                "isIncoming": {
+                "isConversion": {
                     "type": "boolean"
                 },
                 "publicId": {
@@ -794,9 +794,6 @@ const docTemplate = `{
                 },
                 "receiverAccountNumber": {
                     "type": "string"
-                },
-                "sameOwner": {
-                    "type": "boolean"
                 },
                 "senderAccountNumber": {
                     "description": "try 'omitEmpty'",

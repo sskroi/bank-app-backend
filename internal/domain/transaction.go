@@ -29,9 +29,8 @@ type TransactionExtended struct {
 	ReceivedCurrency	string			`gorm:"column:received_currency" json:"receivedCurrency"`
 	IsConversion		bool			`gorm:"column:is_conversion" json:"isConversion"`
 	ConversionRate		decimal.Decimal	`gorm:"column:conversion_rate" json:"conversionRate"`
+	Direction			int				`gorm:"column:direction" json:"direction"`
 	Timestamp			time.Time		`gorm:"column:dt" json:"timestamp"`
-	IsIncoming			bool			`gorm:"column:is_incoming" json:"isIncoming"`
-	SameOwner			bool			`gorm:"column:same_owner" json:"sameOwner"`
 }
 
 var (
