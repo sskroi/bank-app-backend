@@ -16,20 +16,22 @@ type Transaction struct {
 	Received	   decimal.Decimal  `gorm:"column:received"`
 	IsConversion   bool             `gorm:"column:is_conversion"`
 	ConversionRate decimal.Decimal	`gorm:"column:conversion_rate"`
-	Dt			   time.Time		`gorm:"column:dt"`
+	Timestamp	   time.Time		`gorm:"column:dt"`
 }
 
 type TransactionExtended struct {
-	PublicId			uuid.UUID		`gorm:"column:public_id"`
-	SenderAccNumber		uuid.UUID		`gorm:"column:sender_account_number"`
-	SenderId			uint			`gorm:"column:sender_id"`
-	ReceiverAccNumber	uuid.UUID		`gorm:"column:receiver_account_number"`
-	ReceiverId			uint			`gorm:"column:receiver_id"`
-	Sent				decimal.Decimal	`gorm:"column:sent"`
-	Received			decimal.Decimal	`gorm:"column:received"`
-	IsConversion		bool			`gorm:"column:is_conversion"`
-	ConversionRate		decimal.Decimal	`gorm:"column:conversion_rate"`
-	Dt					time.Time		`gorm:"column:dt"`
+	PublicId			uuid.UUID		`gorm:"column:public_id" json:"publicId"`
+	SenderAccNumber		*uuid.UUID		`gorm:"column:sender_account_number" json:"senderAccountNumber"` // try 'omitEmpty'
+	ReceiverAccNumber	uuid.UUID		`gorm:"column:receiver_account_number" json:"receiverAccountNumber"`
+	Sent				decimal.Decimal	`gorm:"column:sent" json:"sent"`
+	SentCurrency		string			`gorm:"column:sent_currency" json:"sentCurrency"`
+	Received			decimal.Decimal	`gorm:"column:received" json:"received"`
+	ReceivedCurrency	string			`gorm:"column:received_currency" json:"receivedCurrency"`
+	IsConversion		bool			`gorm:"column:is_conversion" json:"isConversion"`
+	ConversionRate		decimal.Decimal	`gorm:"column:conversion_rate" json:"conversionRate"`
+	Timestamp			time.Time		`gorm:"column:dt" json:"timestamp"`
+	IsIncoming			bool			`gorm:"column:is_incoming" json:"isIncoming"`
+	SameOwner			bool			`gorm:"column:same_owner" json:"sameOwner"`
 }
 
 var (

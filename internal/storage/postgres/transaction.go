@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 
 	"gorm.io/gorm"
@@ -94,7 +93,7 @@ func (store *PgStorage) CreateTransaction(
 			return domain.ErrReceiverBalance
 		}
 
-		res = store.db.Omit("id", "public_id").WithContext(
+		res = store.db.Omit("id", "public_id", "dt").WithContext(
 			ctx).Create(&newTransaction)
 		if res.Error != nil {
 			return res.Error
@@ -108,26 +107,36 @@ func (store *PgStorage) CreateTransaction(
 		return err
 	}
 
-	store.db.Select("public_id").Where(
+	store.db.Select("public_id", "dt").Where(
 		"id = ?", newTransaction.ID).WithContext(ctx).Find(&newTransaction)
+
+	fmt.Printf("New transaction: %+v", newTransaction)
 
 	return nil
 }
 
 // SELECT public_id, sender_acc.number AS sender_account_number, sender_acc.owner_id AS sender_id, receiver_acc.number AS receiver_account_number, receiver_acc.owner_id AS receiver_id, sent, received, is_conversion, conversion_rate, dt FROM transactions JOIN accounts AS sender_acc ON sender_acc.id = transactions.sender_account_id JOIN accounts AS receiver_acc ON receiver_acc.id = transactions.receiver_account_id;
 
-func (store *PgStorage) GetAccountTransactions(
-		ctx context.Context, accountNumber uuid.UUID,
+func (store *PgStorage) GetUserTransactions(
+		ctx context.Context, userId uint,
 		offset, limit int) ([]domain.TransactionExtended, error) {
 	var transactions []domain.TransactionExtended
 
 	res := store.db.Model(&domain.Transaction{}).Select(
-		"public_id, sender_acc.number AS sender_account_number, sender_acc.owner_id AS sender_id, receiver_acc.number AS receiver_account_number, receiver_acc.owner_id AS receiver_id, sent, received, is_conversion, conversion_rate, dt",
+		"public_id",
+		fmt.Sprintf("CASE WHEN sender_acc.owner_id = %d THEN sender_acc.number ELSE NULL END AS sender_account_number", userId),
+		"sender_acc.owner_id AS sender_id",
+		"receiver_acc.number AS receiver_account_number",
+		"receiver_acc.owner_id AS receiver_id", "sent",
+		"sender_acc.currency AS sent_currency", "received",
+		"receiver_acc.currency AS received_currency", "is_conversion", "conversion_rate",
+		fmt.Sprintf("receiver_acc.owner_id = %d AS is_incoming", userId),
+		"sender_acc.owner_id = receiver_acc.owner_id AS same_owner", "dt",
 		).Joins("JOIN accounts AS sender_acc ON sender_acc.id = transactions.sender_account_id",
 		).Joins("JOIN accounts AS receiver_acc ON receiver_acc.id = transactions.receiver_account_id",
-		).Where("sender_account_number = ? OR receiver_account_number = ?",
-				accountNumber, accountNumber,
-		).Offset(offset).Limit(limit).Scan(&transactions)
+		).Where("sender_acc.owner_id = ? OR receiver_acc.owner_id = ?",
+				userId, userId,
+		).Offset(offset).Limit(limit).Find(&transactions)
 	
 	return transactions, res.Error
 }

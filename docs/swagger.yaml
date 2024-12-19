@@ -43,6 +43,8 @@ definitions:
         type: string
       sent:
         type: number
+      timestamp:
+        type: string
     type: object
   apihandler.response:
     properties:
@@ -109,6 +111,34 @@ definitions:
       number:
         type: string
     type: object
+  domain.TransactionExtended:
+    properties:
+      conversionRate:
+        type: number
+      isConversion:
+        type: boolean
+      isIncoming:
+        type: boolean
+      publicId:
+        type: string
+      received:
+        type: number
+      receivedCurrency:
+        type: string
+      receiverAccountNumber:
+        type: string
+      sameOwner:
+        type: boolean
+      senderAccountNumber:
+        description: try 'omitEmpty'
+        type: string
+      sent:
+        type: number
+      sentCurrency:
+        type: string
+      timestamp:
+        type: string
+    type: object
   domain.User:
     properties:
       email:
@@ -126,7 +156,7 @@ definitions:
       surname:
         type: string
     type: object
-host: bankapi.iorkss.ru
+host: 127.0.0.1:8080
 info:
   contact: {}
   license:
@@ -400,6 +430,52 @@ paths:
       security:
       - UserBearerAuth: []
       summary: Create transaction
+  /transactions:
+    get:
+      parameters:
+      - description: Offset
+        in: query
+        minimum: 0
+        name: offset
+        type: integer
+      - description: Limit
+        in: query
+        maximum: 100
+        minimum: 0
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.TransactionExtended'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "403":
+          description: User deleted or banned
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apihandler.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apihandler.response'
+      security:
+      - UserBearerAuth: []
+      summary: Get all user's transactions
   /user:
     get:
       produces:

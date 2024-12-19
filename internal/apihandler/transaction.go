@@ -4,11 +4,14 @@ import (
 	"bank-app-backend/internal/domain"
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+
+	"fmt"
 )
 
 const DefaultTransactionsLimit int = 100
@@ -26,7 +29,7 @@ type createTransactionResponse struct {
 	Received		  decimal.Decimal `json:"received"`
 	IsConversion	  bool			  `json:"isConversion"`
 	ConversionRate	  decimal.Decimal `json:"conversionRate"`
-	Dt				  time.Time		  `json:"dt"`
+	Timestamp		  time.Time		  `json:"timestamp"`
 }
 
 // @Summary		Create transaction
@@ -70,7 +73,8 @@ func (h *Handler) createTransaction(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		} else if errors.Is(err, domain.ErrNegativeSenderBalance) ||
 				errors.Is(err, domain.ErrSenderAccountClose) ||
-				errors.Is(err, domain.ErrReceiverAccountClose) {
+				errors.Is(err, domain.ErrReceiverAccountClose) ||
+				strings.Contains(err.Error(), "no conversion from") {
 			statusCode = http.StatusForbidden
 		} else {
 			newErrResponse(c, http.StatusInternalServerError, "internal server error", err)
@@ -88,6 +92,7 @@ func (h *Handler) createTransaction(c *gin.Context) {
 		Received: newTransaction.Received,
 		IsConversion: newTransaction.IsConversion,
 		ConversionRate: newTransaction.ConversionRate,
+		Timestamp: newTransaction.Timestamp,
 	})
 }
 
@@ -95,16 +100,13 @@ type transactionsInput struct {
 	Offset int `form:"offset" binding:"gte=0"`
 	Limit  int `form:"limit" binding:"gte=0,lte=100"`
 }
-type transactionsReponse struct {
-
-}
 
 // @Summary		Get all user's transactions
 // @Security  UserBearerAuth
 // @Produce		json
 // @Param			offset query		int	  false	"Offset" minimum(0)
 // @Param			limit  query		int	  false	"Limit"  minimum(0) maximum(100)
-// @Success		200		{array}	  transactionsResponse
+// @Success		200		{array}	  domain.TransactionExtended
 // @Failure		400		{object}	response
 // @Failure   401   {object}  response
 // @Failure   403   {object}  response "User deleted or banned"
@@ -131,4 +133,11 @@ func (h *Handler) userTransactions(c *gin.Context) {
 
 	transactions, err := h.service.Transactions.UserTransactions(
 		c.Request.Context(), userPubId, input.Offset, input.Limit)
+	if err != nil {
+		fmt.Printf("Error: %e\n", err)
+	} else {
+		fmt.Printf("%+v\n(%d)\n", transactions, len(transactions))
+	}
+
+	c.JSON(http.StatusOK, transactions)
 }

@@ -433,6 +433,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/transactions": {
+            "get": {
+                "security": [
+                    {
+                        "UserBearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all user's transactions",
+                "parameters": [
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.TransactionExtended"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "403": {
+                        "description": "User deleted or banned",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apihandler.response"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "security": [
@@ -597,6 +668,9 @@ const docTemplate = `{
                 },
                 "sent": {
                     "type": "number"
+                },
+                "timestamp": {
+                    "type": "string"
                 }
             }
         },
@@ -691,6 +765,48 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.TransactionExtended": {
+            "type": "object",
+            "properties": {
+                "conversionRate": {
+                    "type": "number"
+                },
+                "isConversion": {
+                    "type": "boolean"
+                },
+                "isIncoming": {
+                    "type": "boolean"
+                },
+                "publicId": {
+                    "type": "string"
+                },
+                "received": {
+                    "type": "number"
+                },
+                "receivedCurrency": {
+                    "type": "string"
+                },
+                "receiverAccountNumber": {
+                    "type": "string"
+                },
+                "sameOwner": {
+                    "type": "boolean"
+                },
+                "senderAccountNumber": {
+                    "description": "try 'omitEmpty'",
+                    "type": "string"
+                },
+                "sent": {
+                    "type": "number"
+                },
+                "sentCurrency": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.User": {
             "type": "object",
             "properties": {
@@ -730,7 +846,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "bankapi.iorkss.ru",
+	Host:             "127.0.0.1:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Backend part of educational banking application",
