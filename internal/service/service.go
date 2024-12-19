@@ -23,13 +23,14 @@ type Accounts interface {
 	Create(ctx context.Context, userPubId uuid.UUID, currency string) (uuid.UUID, error)
 	Close(ctx context.Context, userPubId, number uuid.UUID) (error)
 	UserAccounts(ctx context.Context, userPubId uuid.UUID, offset, limit int) ([]domain.Account, error)
-	// GetBalance(ctxt context.Context) (decimal.Decimal, error)
 }
 
 type Transactions interface {
 	Create(ctx context.Context,
 		   userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
 		   amount decimal.Decimal) (domain.Transaction, error)
+	UserTransactions(ctx context.Context, userPubId uuid.UUID,
+			accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error)
 }
 
 type Services struct {
