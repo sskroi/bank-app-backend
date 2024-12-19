@@ -12,7 +12,7 @@ import (
 
 const DefaultAccountsLimit int = 100
 
-var Currencies = [...]string{"rub", "usd"}
+var Currencies = [...]string{"rub", "usd", "eur"}
 
 type createAccountInput struct {
 	Currency string `json:"currency" binding:"required,len=3" enums:"rub"`
