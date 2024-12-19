@@ -40,7 +40,14 @@ CREATE TABLE transactions (
 CREATE TABLE conversion_rates (
   currency_from CHAR(3),
   currency_to CHAR(3),
-  rate DECIMAL(16, 4),
+  rate DECIMAL(20, 8),
   dt_updated TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (currency_from, currency_to)
 );
+
+-- test conversion rates data
+INSERT INTO conversion_rates (currency_from, currency_to, rate) VALUES
+  ('usd', 'rub', 103.5), ('rub', 'usd', 0.00966),
+  ('usd', 'eur', 0.9649), ('eur', 'usd', 1.0365),
+  ('eur', 'rub', 107.273), ('rub', 'eur', 0.00932);
+

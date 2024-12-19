@@ -115,9 +115,9 @@ definitions:
     properties:
       conversionRate:
         type: number
+      direction:
+        type: integer
       isConversion:
-        type: boolean
-      isIncoming:
         type: boolean
       publicId:
         type: string
@@ -127,8 +127,6 @@ definitions:
         type: string
       receiverAccountNumber:
         type: string
-      sameOwner:
-        type: boolean
       senderAccountNumber:
         description: try 'omitEmpty'
         type: string
