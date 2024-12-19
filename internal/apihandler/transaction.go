@@ -137,6 +137,9 @@ func (h *Handler) userTransactions(c *gin.Context) {
 	}
 	transactions, err := h.service.Transactions.UserTransactions(
 		c.Request.Context(), userPubId, accNumber, input.Offset, input.Limit)
-
-	c.JSON(http.StatusOK, transactions)
+	if err != nil {
+		newErrResponse(c, http.StatusInternalServerError, "internal server error", err)
+	} else {
+		c.JSON(http.StatusOK, transactions)	
+	}
 }
