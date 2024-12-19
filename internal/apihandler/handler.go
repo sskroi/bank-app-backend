@@ -85,6 +85,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			transaction.POST("", h.createTransaction)
 		}
+		transactions := authOnly.Group("/transactions")
+		{
+			transactions.GET("", h.userTransactions)
+		}
 
 		// SWAGGER
 		appMode := os.Getenv("BANK_APP_SWAGGER_ENABLED")

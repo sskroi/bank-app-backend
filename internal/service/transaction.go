@@ -55,3 +55,16 @@ func (s TransactionService) Create(
 	err = s.store.CreateTransaction(ctx, senderAcc, receiverAcc, &newTransaction)
 	return newTransaction, err
 }
+
+func (s TransactionService) AccountTransactions(
+		ctx context.Context, userPubId uuid.UUID,
+		offset, limit int) ([]domain., error) {
+	var transactions []domain.Transaction
+
+	userId, err := s.store.GetUserId(ctx, userPubId)
+	if err != nil {
+		return transactions, err
+	}
+
+	return s.store.GetAccountTransactions(ctx, userId, offset, limit)
+}

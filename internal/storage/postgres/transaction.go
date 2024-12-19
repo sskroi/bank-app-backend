@@ -5,11 +5,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 
 	"gorm.io/gorm"
 
 	"errors"
+
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
@@ -110,4 +112,22 @@ func (store *PgStorage) CreateTransaction(
 		"id = ?", newTransaction.ID).WithContext(ctx).Find(&newTransaction)
 
 	return nil
+}
+
+// SELECT public_id, sender_acc.number AS sender_account_number, sender_acc.owner_id AS sender_id, receiver_acc.number AS receiver_account_number, receiver_acc.owner_id AS receiver_id, sent, received, is_conversion, conversion_rate, dt FROM transactions JOIN accounts AS sender_acc ON sender_acc.id = transactions.sender_account_id JOIN accounts AS receiver_acc ON receiver_acc.id = transactions.receiver_account_id;
+
+func (store *PgStorage) GetAccountTransactions(
+		ctx context.Context, accountNumber uuid.UUID,
+		offset, limit int) ([]domain.TransactionExtended, error) {
+	var transactions []domain.TransactionExtended
+
+	res := store.db.Model(&domain.Transaction{}).Select(
+		"public_id, sender_acc.number AS sender_account_number, sender_acc.owner_id AS sender_id, receiver_acc.number AS receiver_account_number, receiver_acc.owner_id AS receiver_id, sent, received, is_conversion, conversion_rate, dt",
+		).Joins("JOIN accounts AS sender_acc ON sender_acc.id = transactions.sender_account_id",
+		).Joins("JOIN accounts AS receiver_acc ON receiver_acc.id = transactions.receiver_account_id",
+		).Where("sender_account_number = ? OR receiver_account_number = ?",
+				accountNumber, accountNumber,
+		).Offset(offset).Limit(limit).Scan(&transactions)
+	
+	return transactions, res.Error
 }

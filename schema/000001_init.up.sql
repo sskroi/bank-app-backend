@@ -30,6 +30,7 @@ CREATE TABLE transactions (
   received DECIMAL(20, 2) NOT NULL,
   is_conversion BOOLEAN NOT NULL DEFAULT false,
   conversion_rate DECIMAL(16, 4),
+  dt TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (sender_account_id) REFERENCES accounts(id)
   ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (receiver_account_id) REFERENCES accounts(id)

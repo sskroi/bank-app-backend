@@ -4,6 +4,7 @@ import (
 	"bank-app-backend/internal/domain"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -25,6 +26,7 @@ type createTransactionResponse struct {
 	Received		  decimal.Decimal `json:"received"`
 	IsConversion	  bool			  `json:"isConversion"`
 	ConversionRate	  decimal.Decimal `json:"conversionRate"`
+	Dt				  time.Time		  `json:"dt"`
 }
 
 // @Summary		Create transaction
@@ -87,4 +89,46 @@ func (h *Handler) createTransaction(c *gin.Context) {
 		IsConversion: newTransaction.IsConversion,
 		ConversionRate: newTransaction.ConversionRate,
 	})
+}
+
+type transactionsInput struct {
+	Offset int `form:"offset" binding:"gte=0"`
+	Limit  int `form:"limit" binding:"gte=0,lte=100"`
+}
+type transactionsReponse struct {
+
+}
+
+// @Summary		Get all user's transactions
+// @Security  UserBearerAuth
+// @Produce		json
+// @Param			offset query		int	  false	"Offset" minimum(0)
+// @Param			limit  query		int	  false	"Limit"  minimum(0) maximum(100)
+// @Success		200		{array}	  transactionsResponse
+// @Failure		400		{object}	response
+// @Failure   401   {object}  response
+// @Failure   403   {object}  response "User deleted or banned"
+// @Failure		404		{object}	response
+// @Failure		500		{object}	response
+// @Router			/transactions [get]
+func (h *Handler) userTransactions(c *gin.Context) {
+	var input transactionsInput
+
+	if err := c.BindQuery(&input); err != nil {
+		newErrResponse(c, http.StatusBadRequest, "invalid input", err)
+		return
+	}
+
+	userPubId, err := getUserPubId(c)
+	if err != nil {
+		newResponse(c, http.StatusConflict, err.Error())
+		return
+	}
+
+	if input.Limit == 0 {
+		input.Limit = DefaultAccountsLimit
+	}
+
+	transactions, err := h.service.Transactions.UserTransactions(
+		c.Request.Context(), userPubId, input.Offset, input.Limit)
 }

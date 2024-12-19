@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+	"time"
 )
 
 type Transaction struct {
@@ -15,6 +16,20 @@ type Transaction struct {
 	Received	   decimal.Decimal  `gorm:"column:received"`
 	IsConversion   bool             `gorm:"column:is_conversion"`
 	ConversionRate decimal.Decimal	`gorm:"column:conversion_rate"`
+	Dt			   time.Time		`gorm:"column:dt"`
+}
+
+type TransactionExtended struct {
+	PublicId			uuid.UUID		`gorm:"column:public_id"`
+	SenderAccNumber		uuid.UUID		`gorm:"column:sender_account_number"`
+	SenderId			uint			`gorm:"column:sender_id"`
+	ReceiverAccNumber	uuid.UUID		`gorm:"column:receiver_account_number"`
+	ReceiverId			uint			`gorm:"column:receiver_id"`
+	Sent				decimal.Decimal	`gorm:"column:sent"`
+	Received			decimal.Decimal	`gorm:"column:received"`
+	IsConversion		bool			`gorm:"column:is_conversion"`
+	ConversionRate		decimal.Decimal	`gorm:"column:conversion_rate"`
+	Dt					time.Time		`gorm:"column:dt"`
 }
 
 var (
