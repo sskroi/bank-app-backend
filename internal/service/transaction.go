@@ -58,7 +58,7 @@ func (s TransactionService) Create(
 
 func (s TransactionService) UserTransactions(
 		ctx context.Context, userPubId uuid.UUID,
-		offset, limit int) ([]domain.TransactionExtended, error) {
+		accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error) {
 	var transactions []domain.TransactionExtended
 
 	userId, err := s.store.GetUserId(ctx, userPubId)
@@ -66,5 +66,5 @@ func (s TransactionService) UserTransactions(
 		return transactions, err
 	}
 
-	return s.store.GetUserTransactions(ctx, userId, offset, limit)
+	return s.store.GetUserTransactions(ctx, userId, accountNumber, offset, limit)
 }

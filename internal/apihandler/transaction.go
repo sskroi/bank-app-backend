@@ -10,8 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
-
-	"fmt"
 )
 
 const DefaultTransactionsLimit int = 100
@@ -97,13 +95,15 @@ func (h *Handler) createTransaction(c *gin.Context) {
 }
 
 type transactionsInput struct {
-	Offset int `form:"offset" binding:"gte=0"`
-	Limit  int `form:"limit" binding:"gte=0,lte=100"`
+	AccNumber	string	`form:"accountNumber"`
+	Offset		int		`form:"offset" binding:"gte=0"`
+	Limit		int		`form:"limit" binding:"gte=0,lte=100"`
 }
 
 // @Summary		Get all user's transactions
 // @Security  UserBearerAuth
 // @Produce		json
+// @Param			accountNumber query		string	  false	"Account number"
 // @Param			offset query		int	  false	"Offset" minimum(0)
 // @Param			limit  query		int	  false	"Limit"  minimum(0) maximum(100)
 // @Success		200		{array}	  domain.TransactionExtended
@@ -131,13 +131,12 @@ func (h *Handler) userTransactions(c *gin.Context) {
 		input.Limit = DefaultAccountsLimit
 	}
 
-	transactions, err := h.service.Transactions.UserTransactions(
-		c.Request.Context(), userPubId, input.Offset, input.Limit)
-	if err != nil {
-		fmt.Printf("Error: %e\n", err)
-	} else {
-		fmt.Printf("%+v\n(%d)\n", transactions, len(transactions))
+	var accNumber *uuid.UUID
+	if _uuid, err := uuid.Parse(input.AccNumber); err == nil {
+		accNumber = &_uuid
 	}
+	transactions, err := h.service.Transactions.UserTransactions(
+		c.Request.Context(), userPubId, accNumber, input.Offset, input.Limit)
 
 	c.JSON(http.StatusOK, transactions)
 }

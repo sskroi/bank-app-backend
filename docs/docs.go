@@ -446,6 +446,12 @@ const docTemplate = `{
                 "summary": "Get all user's transactions",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Account number",
+                        "name": "accountNumber",
+                        "in": "query"
+                    },
+                    {
                         "minimum": 0,
                         "type": "integer",
                         "description": "Offset",
@@ -846,7 +852,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1:8080",
+	Host:             "bankapi.iorkss.ru",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Backend part of educational banking application",

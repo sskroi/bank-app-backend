@@ -29,5 +29,5 @@ type Storage interface {
 		senderAcc, receiverAcc domain.Account,
 		newTransaction *domain.Transaction) error
 	GetUserTransactions(ctx context.Context,
-		userId uint, offset, limit int) ([]domain.TransactionExtended, error)
+		userId uint, accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error)
 }

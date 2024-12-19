@@ -156,7 +156,7 @@ definitions:
       surname:
         type: string
     type: object
-host: 127.0.0.1:8080
+host: bankapi.iorkss.ru
 info:
   contact: {}
   license:
@@ -433,6 +433,10 @@ paths:
   /transactions:
     get:
       parameters:
+      - description: Account number
+        in: query
+        name: accountNumber
+        type: string
       - description: Offset
         in: query
         minimum: 0

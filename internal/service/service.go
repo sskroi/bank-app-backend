@@ -30,7 +30,7 @@ type Transactions interface {
 		   userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
 		   amount decimal.Decimal) (domain.Transaction, error)
 	UserTransactions(ctx context.Context, userPubId uuid.UUID,
-			offset, limit int) ([]domain.TransactionExtended, error)
+			accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error)
 }
 
 type Services struct {

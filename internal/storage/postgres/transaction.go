@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 
 	"gorm.io/gorm"
@@ -119,7 +120,7 @@ func (store *PgStorage) CreateTransaction(
 
 func (store *PgStorage) GetUserTransactions(
 		ctx context.Context, userId uint,
-		offset, limit int) ([]domain.TransactionExtended, error) {
+		accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error) {
 	var transactions []domain.TransactionExtended
 
 	res := store.db.Model(&domain.Transaction{}).Select(
@@ -135,8 +136,13 @@ func (store *PgStorage) GetUserTransactions(
 		).Joins("JOIN accounts AS sender_acc ON sender_acc.id = transactions.sender_account_id",
 		).Joins("JOIN accounts AS receiver_acc ON receiver_acc.id = transactions.receiver_account_id",
 		).Where("sender_acc.owner_id = ? OR receiver_acc.owner_id = ?",
-				userId, userId,
-		).Offset(offset).Limit(limit).Find(&transactions)
+				userId, userId)
+	if accountNumber != nil {
+		res = res.Where(
+			"receiver_acc.number = ? OR sender_acc.number = ? AND sender_acc.owner_id = ?",
+			accountNumber, accountNumber, userId)
+	}
+	res = res.Offset(offset).Limit(limit).Find(&transactions)
 	
 	return transactions, res.Error
 }
