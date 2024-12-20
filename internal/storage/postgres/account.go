@@ -34,7 +34,7 @@ func (store *PgStorage) GetAccountByNumber(
 
 func (store *PgStorage) CreateAccount(
 	ctx context.Context, newAccount *domain.Account) error {
-	res := store.db.Omit("id", "number").WithContext(ctx).Create(newAccount)
+	res := store.db.Omit("id", "number", "balance", "is_close").WithContext(ctx).Create(newAccount)
 	if res.Error != nil {
 		return res.Error
 	}
@@ -47,7 +47,7 @@ func (store *PgStorage) CreateAccount(
 }
 
 func (store *PgStorage) CloseAccount(
-		ctx context.Context, number uuid.UUID, ownerId uint) error {
+	ctx context.Context, number uuid.UUID, ownerId uint) error {
 	account, err := store.GetAccountByNumber(ctx, number, ownerId, nil)
 	if err != nil {
 		return err
