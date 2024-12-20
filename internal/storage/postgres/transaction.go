@@ -137,7 +137,7 @@ func (store *PgStorage) GetUserTransactions(
 		).Joins("JOIN accounts AS sender_acc ON sender_acc.id = transactions.sender_account_id",
 		).Joins("JOIN accounts AS receiver_acc ON receiver_acc.id = transactions.receiver_account_id",
 		).Where("sender_acc.owner_id = ? OR receiver_acc.owner_id = ?",
-				userId, userId)
+				userId, userId).Order("transactions.id DESC")
 	if accountNumber != nil {
 		res = res.Where(
 			"receiver_acc.number = ? OR sender_acc.number = ? AND sender_acc.owner_id = ?",
