@@ -541,10 +541,8 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/user/update-profile": {
-            "post": {
+            },
+            "patch": {
                 "security": [
                     {
                         "UserBearerAuth": []

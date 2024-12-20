@@ -534,10 +534,8 @@
                         }
                     }
                 }
-            }
-        },
-        "/user/update-profile": {
-            "post": {
+            },
+            "patch": {
                 "security": [
                     {
                         "UserBearerAuth": []

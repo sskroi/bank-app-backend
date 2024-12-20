@@ -498,8 +498,7 @@ paths:
       security:
       - UserBearerAuth: []
       summary: Get user info
-  /user/update-profile:
-    post:
+    patch:
       consumes:
       - application/json
       parameters:
