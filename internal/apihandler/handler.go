@@ -47,7 +47,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		// hard coded
 		// AllowOrigins:     []string{"https://iorkss.ru"},
 		AllowAllOrigins: true,
-		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowMethods:    []string{"GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:    []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:   []string{},
 		// AllowCredentials: true,
