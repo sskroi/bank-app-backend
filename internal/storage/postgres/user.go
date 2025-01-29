@@ -22,10 +22,9 @@ func (store *PgStorage) CreateUser(ctx context.Context, newUser domain.User) err
 	return err
 }
 
-func (store *PgStorage) GetUser(
-		ctx context.Context, userPubId uuid.UUID) (domain.User, error) {
+func (store *PgStorage) GetUser(ctx context.Context, userPubId uuid.UUID) (domain.User, error) {
 	var user domain.User
-	res := store.db.Omit("id").Where(
+	res := store.db.Where(
 		"public_id = ?", userPubId).WithContext(ctx).Find(&user)
 	if res.Error != nil {
 		return user, res.Error
@@ -53,7 +52,7 @@ func (store *PgStorage) GetUserByEmail(ctx context.Context, email string) (domai
 
 func (store *PgStorage) GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error) {
 	user := domain.User{}
-	
+
 	res := store.db.Where("public_id = ?", userPubId).WithContext(
 		ctx).Select("id").Find(&user)
 	if res.Error != nil {
@@ -65,4 +64,16 @@ func (store *PgStorage) GetUserId(ctx context.Context, userPubId uuid.UUID) (uin
 	}
 
 	return user.ID, nil
+}
+
+func (store *PgStorage) UpdateUser(ctx context.Context, user domain.User) error {
+	err := store.db.WithContext(ctx).Save(&user).Error
+
+	var pgErr *pgconn.PgError
+	// 23505 == unique_violation error
+	if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+		return domain.ErrUserAlreadyExists
+	}
+
+	return err
 }

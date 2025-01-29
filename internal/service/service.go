@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/net/context"
-	
+
 	"github.com/shopspring/decimal"
 )
 
@@ -17,20 +17,21 @@ type Users interface {
 	// VerifyAccessToken verifies token and return user's public id if token is valid
 	VerifyAccessToken(ctx context.Context, accessToken string) (uuid.UUID, error)
 	Get(ctx context.Context, userPubId uuid.UUID) (domain.User, error)
+	Update(ctx context.Context, userPubId uuid.UUID, curPassword string, input UsersSignUpInput) error
 }
 
 type Accounts interface {
 	Create(ctx context.Context, userPubId uuid.UUID, currency string) (uuid.UUID, error)
-	Close(ctx context.Context, userPubId, number uuid.UUID) (error)
+	Close(ctx context.Context, userPubId, number uuid.UUID) error
 	UserAccounts(ctx context.Context, userPubId uuid.UUID, offset, limit int) ([]domain.Account, error)
 }
 
 type Transactions interface {
 	Create(ctx context.Context,
-		   userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
-		   amount decimal.Decimal) (domain.Transaction, error)
+		userPubId, senderAccNumber, receiverAccNumber uuid.UUID,
+		amount decimal.Decimal) (domain.Transaction, error)
 	UserTransactions(ctx context.Context, userPubId uuid.UUID,
-			accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error)
+		accountNumber *uuid.UUID, offset, limit int) ([]domain.TransactionExtended, error)
 }
 
 type Services struct {
@@ -41,8 +42,8 @@ type Services struct {
 
 func New(store storage.Storage, passwordHasher hasher.PasswdHasher, jwtSignKey string) *Services {
 	return &Services{
-		Users: NewUserService(store, passwordHasher, jwtSignKey),
-		Accounts: NewAccountService(store),
+		Users:        NewUserService(store, passwordHasher, jwtSignKey),
+		Accounts:     NewAccountService(store),
 		Transactions: NewTransactionService(store),
 	}
 }

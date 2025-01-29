@@ -562,7 +562,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/apihandler.updateUserInput"
                         }
                     }
                 ],
@@ -749,6 +749,47 @@ const docTemplate = `{
             "properties": {
                 "accessToken": {
                     "type": "string"
+                }
+            }
+        },
+        "apihandler.updateUserInput": {
+            "type": "object",
+            "required": [
+                "currentPassword"
+            ],
+            "properties": {
+                "currentPassword": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                },
+                "passport": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                },
+                "patronymic": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
                 }
             }
         },

@@ -108,3 +108,41 @@ func (s *UserService) VerifyAccessToken(ctx context.Context, accessToken string)
 func (s *UserService) Get(ctx context.Context, userPubId uuid.UUID) (domain.User, error) {
 	return s.store.GetUser(ctx, userPubId)
 }
+
+func (s *UserService) Update(ctx context.Context, userPubId uuid.UUID, curPassword string, input UsersSignUpInput) error {
+	user, err := s.Get(ctx, userPubId)
+	if err != nil {
+		return err
+	}
+
+	if !s.pswdHasher.Check(user.PasswordHash, curPassword) {
+		return domain.ErrInvalidLoginCredentials
+	}
+
+	if input.Email != "" {
+		user.Email = input.Email
+	}
+	if input.Password != "" {
+		hashedPassword, err := s.pswdHasher.Hash(input.Password)
+		if err != nil {
+			return err
+		}
+		user.PasswordHash = hashedPassword
+	}
+	if input.Name != "" {
+		user.Name = input.Name
+	}
+	if input.Surname != "" {
+		user.Surname = input.Surname
+	}
+	if input.Patronymic != nil {
+		user.Patronymic = input.Patronymic
+	}
+	if input.Passport != "" {
+		user.Passport = input.Passport
+	}
+
+	err = s.store.UpdateUser(ctx, user)
+
+	return err
+}

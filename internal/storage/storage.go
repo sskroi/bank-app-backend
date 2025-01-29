@@ -16,6 +16,7 @@ type Storage interface {
 	GetUserByEmail(ctx context.Context, email string) (domain.User, error)
 	// GetUserId returns domain.ErrUnknownUserPubId if there is no user with such public id
 	GetUserId(ctx context.Context, userPubId uuid.UUID) (uint, error)
+	UpdateUser(ctx context.Context, user domain.User) error
 
 	// Account
 	// ID, Number will be ignored

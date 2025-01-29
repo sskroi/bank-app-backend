@@ -100,6 +100,37 @@ definitions:
       accessToken:
         type: string
     type: object
+  apihandler.updateUserInput:
+    properties:
+      currentPassword:
+        maxLength: 64
+        minLength: 8
+        type: string
+      email:
+        maxLength: 64
+        type: string
+      name:
+        maxLength: 64
+        minLength: 1
+        type: string
+      passport:
+        maxLength: 64
+        minLength: 8
+        type: string
+      password:
+        maxLength: 64
+        minLength: 8
+        type: string
+      patronymic:
+        maxLength: 64
+        type: string
+      surname:
+        maxLength: 64
+        minLength: 1
+        type: string
+    required:
+    - currentPassword
+    type: object
   domain.Account:
     properties:
       balance:
@@ -507,7 +538,7 @@ paths:
         name: input
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/apihandler.updateUserInput'
       produces:
       - application/json
       responses:
