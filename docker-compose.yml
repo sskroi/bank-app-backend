@@ -2,6 +2,7 @@ services:
   app:
     build: .
     network_mode: bridge
+    restart: unless-stopped
     ports:
       - "127.0.0.1:8100:8100"
     environment:
